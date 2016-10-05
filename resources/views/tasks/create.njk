@@ -3,7 +3,7 @@
 {% block content %}
   <div>
     <h3>Create Task</h3>
-    {{ form.open({action: 'TaskController.store', params: {project_id: project_id} }) }}
+    {{ form.open({action: 'TaskController.store', params: {project_id: project_id}, files:true }) }}
 
       {{ csrfField }}
 

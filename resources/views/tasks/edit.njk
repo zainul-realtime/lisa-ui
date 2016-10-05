@@ -3,7 +3,7 @@
 {% block content %}
   <div>
     <h3>Edit Task</h3>
-    {{ form.open({ action: 'TaskController.update', method:'PUT', params: { project_id: project_id, id: task.id} }) }}
+    {{ form.open({ action: 'TaskController.update', method:'PUT', params: { project_id: project_id, id: task.id}, files:true }) }}
 
     {{ csrfField }}
 

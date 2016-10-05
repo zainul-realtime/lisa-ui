@@ -2,6 +2,8 @@
 
 const Task = use('App/Model/Task');
 const TaskRepository = make('App/Repositories/Task');
+const Helpers = use('Helpers');
+var fs = require('fs');
 
 class TaskController {
   getProjectId (request) {
@@ -10,6 +12,34 @@ class TaskController {
 
   baseRedirect(project_id) {
     return `/projects/${project_id}/tasks`;
+  }
+
+  * uploadAndMove(request, response) {
+
+    var dir = './storage/projects';
+
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+
+    const yaml = request.file('yaml', {
+        maxSize: '2mb',
+        allowedExtensions: ['yml', 'yaml']
+    })
+    const fileName = this.generateName(yaml.extension());
+
+    yield yaml.move(Helpers.storagePath('projects'), String(fileName));
+
+    if (!yaml.moved()) {
+      response.badRequest(yaml.errors())
+      return
+    }
+
+    return yaml;
+  }
+
+  generateName(extention) {
+    return String(new Date().getTime()) + String(Math.floor(Math.random()*10000)) +'.'+ extention;
   }
 
   * index(request, response) {
@@ -27,8 +57,11 @@ class TaskController {
   }
 
   * store(request, response) {
-    const postData = request.only('name', 'description', 'task_id');
+    const postData = request.only('name', 'description', 'yaml');
 
+    const yaml = yield this.uploadAndMove(request, response);
+
+    postData.yaml = yaml.uploadPath()
     postData.project_id = this.getProjectId(request);
 
     yield Task.create(postData)
@@ -49,7 +82,15 @@ class TaskController {
   }
 
   * update(request, response) {
-    const updatedData = request.only('name', 'description');
+    const updatedData = request.only('name', 'description', 'yaml');
+
+    if (request.file('yaml').file.size && request.file('yaml').file.size !== 0) {
+
+      const yaml = yield this.uploadAndMove(request, response);
+
+      updatedData.yaml = yaml.uploadPath()
+
+    }
 
     updatedData.project_id = this.getProjectId(request);
 

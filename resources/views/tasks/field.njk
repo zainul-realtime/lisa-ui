@@ -7,3 +7,8 @@
   {{ form.label('Description') }}
   {{ form.input('textarea', 'description', task.description, { class: 'form-control' }) }}
 </fieldset>
+
+<fieldset class="form-group">
+  {{ form.label('Yaml') }}
+  {{ form.file('yaml',{ class: 'form-control' }) }}
+</fieldset>
