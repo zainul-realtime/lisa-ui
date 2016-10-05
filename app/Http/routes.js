@@ -29,7 +29,7 @@ Route.post('projects/:project_id/tasks', 'TaskController.store')
 Route.put('projects/:project_id/tasks/:id', 'TaskController.update')
 Route.delete('projects/:project_id/tasks/:id', 'TaskController.destroy')
 
-// Route.get('projects/:project_id/tasks', 'TaskController.index')
+// Route.get('projects/:project_id/tasks/:task_id', 'FileItemController.index')
 // Route.get('projects/:project_id/tasks/create', 'TaskController.create')
 // Route.get('projects/:project_id/tasks/:id', 'TaskController.show')
 // Route.get('projects/:project_id/tasks/:id/edit', 'TaskController.edit')

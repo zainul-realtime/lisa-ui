@@ -2,6 +2,7 @@
 
 const Task = use('App/Model/Task');
 const TaskRepository = make('App/Repositories/Task');
+const FilteItemRepository = make('App/Repositories/FileItem')
 const Helpers = use('Helpers');
 var fs = require('fs');
 
@@ -43,7 +44,7 @@ class TaskController {
   }
 
   * index(request, response) {
-    const tasks = yield Task.all();
+    const tasks = yield Task.query().where('project_id', request.param('project_id')).fetch();
 
     yield response.sendView('tasks.index',
       {
@@ -64,7 +65,13 @@ class TaskController {
     postData.yaml = yaml.uploadPath()
     postData.project_id = this.getProjectId(request);
 
-    yield Task.create(postData)
+    // console.log(request.file('file_items[]').length);
+
+    const created = yield Task.create(postData)
+
+    if (created.toJSON().id) {
+
+    }
 
     response.redirect(this.baseRedirect(postData.project_id));
   }

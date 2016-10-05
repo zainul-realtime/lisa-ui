@@ -1,0 +1,48 @@
+<script>
+  function addMore(divName) {
+    var newdiv = document.createElement('tr');
+    newdiv.innerHTML =
+    '<tr>' +
+      '<td>' +
+        '<input type="text" name="name[]" class="form-control" />' +
+      '</td>' +
+      '<td>' +
+        '<input type="file" name="file_items[]" class="form-control" />' +
+      '</td>' +
+      '<td>' +
+        '<a class="btn btn-sm btn-success" onclick="addMore(\'bodyAddMore\')">+</a>' +
+      '</td>' +
+    '</tr>';
+    document.getElementById(divName).appendChild(newdiv);
+    return false;
+  }
+</script>
+
+<table class="table">
+  <thead>
+    <tr>
+      <td>
+        {{ form.label('Name') }}
+      </td>
+      <td>
+        {{ form.label('File Data') }}
+      </td>
+      <td>
+        {{ form.label('Add More') }}
+      </td>
+    </tr>
+  </thead>
+  <tbody id="bodyAddMore">
+    <tr>
+      <td>
+        <input type="text" name="name[]" class="form-control" />
+      </td>
+      <td>
+        <input type="file" name="file_items[]" class="form-control" />
+      </td>
+      <td>
+        <a class="btn btn-sm btn-success" onclick="addMore('bodyAddMore')">+</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

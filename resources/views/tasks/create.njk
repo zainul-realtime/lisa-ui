@@ -9,6 +9,8 @@
 
       {% include "./field.njk" %}
 
+      {% include "./add_more.njk" %}
+
       {{ form.submit('Save', 'save', { class: 'btn btn-primary' }) }}
 
     {{ form.close() }}
