@@ -2,14 +2,17 @@
 
 {% block content %}
   <div>
+    <br/>
     <a href="/projects/create" class="btn btn-success">
       New Project
     </a>
-    <table class="table">
+    <br/><br/>
+    <table class="table table-striped">
       <thead>
         <tr>
-          <td>Name</td>
-          <td>Description</td>
+          <td><b>Name</b></td>
+          <td><b>Description</b></td>
+          <td><b>Action</b></td>
         </tr>
       </thead>
       {% for project in projects %}
