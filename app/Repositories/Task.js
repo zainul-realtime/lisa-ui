@@ -33,6 +33,7 @@ class TaskRepository {
 
     task.name = options.name;
     task.description = options.description;
+    task.yaml = options.yaml;
     task.project_id = options.project_id;
 
     yield task.save()
@@ -50,6 +51,7 @@ class TaskRepository {
     task.name = options.name;
     task.description = options.description;
     task.project_id = options.project_id;
+    task.yaml = options.yaml;
 
     yield task.save();
 
