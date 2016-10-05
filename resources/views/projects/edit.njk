@@ -1,0 +1,16 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <h3>Edit Project</h3>
+    {{ form.open({action: 'ProjectController.update', params: {id: project.id} }) }}
+
+    {{ csrfField }}
+
+    {% include "./field.njk" %}
+
+    {{ form.submit('Update', 'update', { class: 'btn btn-primary' }) }}
+
+  {{ form.close() }}
+  </div>
+{% endblock %}

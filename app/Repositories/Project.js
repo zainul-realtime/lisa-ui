@@ -2,7 +2,7 @@
 
 const Exceptions = use('App/Exceptions');
 
-class Project {
+class ProjectRepository {
 
   static get inject() {
     return ['App/Model/Project'];
@@ -67,3 +67,5 @@ class Project {
     return true
   }
 }
+
+module.exports = ProjectRepository

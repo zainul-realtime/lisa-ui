@@ -1,0 +1,16 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <h3>Create Project</h3>
+    {{ form.open({action: 'ProjectController.store'}) }}
+
+    {{ csrfField }}
+
+    {% include "./field.njk" %}
+
+    {{ form.submit('Save', 'save', { class: 'btn btn-primary' }) }}
+
+  {{ form.close() }}
+  </div>
+{% endblock %}

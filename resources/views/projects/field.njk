@@ -1,0 +1,9 @@
+<fieldset class="form-group">
+  {{ form.label('Name') }}
+  {{ form.input('text', 'name', project.name, { class: 'form-control' }) }}
+</fieldset>
+
+<fieldset class="form-group">
+  {{ form.label('Description') }}
+  {{ form.input('textarea', 'description', project.description, { class: 'form-control' }) }}
+</fieldset>
