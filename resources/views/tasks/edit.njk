@@ -1,0 +1,16 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <h3>Edit Task</h3>
+    {{ form.open({ action: 'TaskController.update', method:'PUT', params: { project_id: project_id, id: task.id} }) }}
+
+    {{ csrfField }}
+
+    {% include "./field.njk" %}
+
+    {{ form.submit('Update', 'update', { class: 'btn btn-primary' }) }}
+
+  {{ form.close() }}
+  </div>
+{% endblock %}

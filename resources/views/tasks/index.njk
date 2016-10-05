@@ -3,8 +3,8 @@
 {% block content %}
   <div>
     <br/>
-    <a href="/projects/create" class="btn btn-success">
-      New Project
+    <a href="/projects/{{ project_id }}/tasks/create" class="btn btn-success">
+      New Task
     </a>
     <br/><br/>
     <table class="table table-striped">
@@ -15,22 +15,20 @@
           <td><b>Action</b></td>
         </tr>
       </thead>
-      {% for project in projects %}
+      {% for task in tasks %}
         <tr>
-          <td>{{ project.name }}</td>
-          <td>{{ project.description }}</td>
+          <td>{{ task.name }}</td>
+          <td>{{ task.description }}</td>
           <td>
-            {{ form.open({action: 'ProjectController.destroy', method: 'DELETE', params: { id: project.id } }) }}
+            {{ form.open({action: 'TaskController.destroy', method: 'DELETE',
+             params: { project_id: project_id, id: task.id } }) }}
             <div class='btn-group'>
               {{ csrfField }}
-              <a href="/projects/{{ project.id }}" class="btn btn-info">
+              <a href="/projects/{{ project_id }}/tasks/{{ task.id }}" class="btn btn-info">
                 <i class="fa fa-eye" aria-hidden="true"></i>
               </a>
-              <a href="/projects/{{ project.id }}/edit" class="btn btn-warning">
+              <a href="/projects/{{ project_id }}/tasks/{{ task.id }}/edit" class="btn btn-warning">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-              </a>
-              <a href="/projects/{{ project.id }}/tasks" class="btn btn-success">
-                <i class="fa fa-tasks" aria-hidden="true"></i>
               </a>
               {{ form.button('X', 'delete', { class: 'btn btn-danger' }) }}
             <div>

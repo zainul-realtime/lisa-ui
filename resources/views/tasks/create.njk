@@ -1,0 +1,16 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <h3>Create Task</h3>
+    {{ form.open({action: 'TaskController.store', params: {project_id: project_id} }) }}
+
+      {{ csrfField }}
+
+      {% include "./field.njk" %}
+
+      {{ form.submit('Save', 'save', { class: 'btn btn-primary' }) }}
+
+    {{ form.close() }}
+  </div>
+{% endblock %}

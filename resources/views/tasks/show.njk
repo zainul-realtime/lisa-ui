@@ -1,0 +1,16 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <h3>Show Task</h3>
+
+    <fieldset class="form-group">
+      <b>Name</b> : {{ task.name }}
+    </fieldset>
+
+    <fieldset class="form-group">
+      <b>Description</b> : {{ task.description }}
+    </fieldset>
+
+  </div>
+{% endblock %}
