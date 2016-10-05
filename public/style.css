@@ -5,7 +5,8 @@ body {
   -ms-font-feature-settings: "kern", "liga", "pnum";
   font-feature-settings: "kern", "liga", "pnum";
   -webkit-font-smoothing: antialiased;
-  font-weight: lighter;
+  /*font-weight: normal;*/
+  font-size: 14px;
   background: #ffffff
 }
 

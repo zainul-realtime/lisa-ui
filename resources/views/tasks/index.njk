@@ -33,6 +33,9 @@
               <a href="/projects/{{ project_id }}/tasks/{{ task.id }}/edit" class="btn btn-warning">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
               </a>
+              <a href="/projects/{{ project_id }}/tasks/{{ task.id }}/file_items" class="btn btn-primary">
+                <i class="fa fa-list" aria-hidden="true"></i>
+              </a>
               {{ form.button('X', 'delete', { class: 'btn btn-danger' }) }}
             <div>
             {{ form.close() }}
