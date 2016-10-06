@@ -1,6 +1,7 @@
 'use strict'
 
 const Task = use('App/Model/Task');
+const FileItem = use('App/Model/FileItem');
 const TaskRepository = make('App/Repositories/Task');
 const FilteItemRepository = make('App/Repositories/FileItem')
 const Helpers = use('Helpers');
@@ -15,32 +16,30 @@ class TaskController {
     return `/projects/${project_id}/tasks`;
   }
 
-  * uploadAndMove(request, response) {
+  * uploadAndMove(requestFile, response, dir, storagePath) {
 
-    var dir = './storage/projects';
+    // var dir = './storage/tasks';
 
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
     }
 
-    const yaml = request.file('yaml', {
-        maxSize: '2mb',
-        allowedExtensions: ['yml', 'yaml']
-    })
-    const fileName = this.generateName(yaml.extension());
+    const fileUpload = requestFile;
 
-    yield yaml.move(Helpers.storagePath('projects'), String(fileName));
+    const fileName = this.generateName(fileUpload.extension());
 
-    if (!yaml.moved()) {
-      response.badRequest(yaml.errors())
+    yield fileUpload.move(Helpers.storagePath(storagePath), String(fileName));
+
+    if (!fileUpload.moved()) {
+      response.badRequest(fileUpload.errors())
       return
     }
 
-    return yaml;
+    return fileUpload;
   }
 
   generateName(extention) {
-    return String(new Date().getTime()) + String(Math.floor(Math.random()*10000)) +'.'+ extention;
+    return String(new Date().getTime()) + '&' + String(Math.floor(Math.random()*10000)) +'.'+ extention;
   }
 
   * index(request, response) {
@@ -60,20 +59,42 @@ class TaskController {
   * store(request, response) {
     const postData = request.only('name', 'description', 'yaml');
 
-    const yaml = yield this.uploadAndMove(request, response);
+    const requestFile = request.file('yaml', {
+        maxSize: '2mb',
+        allowedExtensions: ['yml', 'yaml']
+    })
+
+    const yaml = yield this.uploadAndMove(requestFile, response, './storage/tasks', 'tasks');
 
     postData.yaml = yaml.uploadPath()
     postData.project_id = this.getProjectId(request);
 
-    // console.log(request.file('file_items[]').length);
-
     const created = yield Task.create(postData)
 
     if (created.toJSON().id) {
-
+      for (var i = 0; i < request.file('file_items[]').length; i++) {
+        yield this.storeFileItem(request, response, i, created.toJSON().id);
+      }
     }
 
     response.redirect(this.baseRedirect(postData.project_id));
+  }
+
+  * storeFileItem(request, response, i, task_id) {
+    const postData = {};
+
+    const requestFile = request.file('file_items[]', {
+        maxSize: '2mb',
+        allowedExtensions: ['csv']
+    })[i];
+
+    const file_csv = yield this.uploadAndMove(requestFile, response, './storage/file_items', 'file_items');
+
+    postData.task_id = task_id;
+    postData.name = (request.file('file_items[]')[i]).file.name.split('.')[0];
+    postData.files = file_csv.uploadPath();
+
+    return yield FileItem.create(postData);
   }
 
   * show(request, response) {
@@ -93,7 +114,12 @@ class TaskController {
 
     if (request.file('yaml').file.size && request.file('yaml').file.size !== 0) {
 
-      const yaml = yield this.uploadAndMove(request, response);
+      const requestFile = request.file('yaml', {
+          maxSize: '2mb',
+          allowedExtensions: ['yml', 'yaml']
+      })
+
+      const yaml = yield this.uploadAndMove(requestFile, response, './storage/tasks', 'tasks');
 
       updatedData.yaml = yaml.uploadPath()
 
