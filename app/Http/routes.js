@@ -20,6 +20,7 @@ const Route = use('Route')
 Route.on('/').render('welcome')
 
 Route.resources('projects', 'ProjectController')
+Route.get('projects/install/:id', 'ProjectController.install');
 
 Route.get('projects/:project_id/tasks', 'TaskController.index')
 Route.get('projects/:project_id/tasks/create', 'TaskController.create')

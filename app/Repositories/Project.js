@@ -1,5 +1,7 @@
 'use strict'
 
+var exec = require('child-process-promise').exec;
+const Install = use('App/Repositories/lisa/install');
 const Exceptions = use('App/Exceptions');
 
 class ProjectRepository {
@@ -54,6 +56,14 @@ class ProjectRepository {
     yield project.save();
 
     return project
+  }
+
+  * install(config, project) {
+    let install = new Install({
+      exec
+    })
+
+    return yield install.setupDependecies(config, project);
   }
 
   * delete (id) {

@@ -2,36 +2,20 @@
 
 class Install {
   constructor(options) {
-    this.hasInstalledDep = options.hasInstalledDep;
-    this.installedDep = options.installedDep;
-    this.yaml = options.yaml;
     this.exec = options.exec;
-    this.fs = options.fs;
   }
 
-  setupDependecies() {
-    try {
-      this.hasInstalledDep = this.yaml.load(this.installedDep);
-    } catch (e) {}
-
-    if (!this.hasInstalledDep) {
-      this.exec('npm install -g sequelize-auto').stdout.pipe(process.stdout);
-      this.exec('npm install -g pg pg-hstore').stdout.pipe(process.stdout);
-      this.exec('sequelize-auto -o "./models/' + process.env.NODE_ENV +
-        '" -d ' + process.env.DB_NAME +
-        ' -h ' + process.env.DB_HOST +
-        ' -u ' + process.env.DB_USER +
-        ' -p ' + process.env.DB_PORT +
-        ' -x ' + process.env.DB_PASSWORD +
-        ' -e ' + process.env.DB_DIALECT,
-        function(error, stdout, stderr) {})
-      try {
-        this.fs.writeFileSync(this.installedDep, "install: true", 'utf8');
-      } catch (e) {
-        console.log(e)
-      }
-    }
+  * setupDependecies(config, project) {
+    yield this.exec('npm install -g sequelize-auto');
+    yield this.exec('npm install -g pg pg-hstore');
+    return yield this.exec('sequelize-auto -o "./models/'+ project.id +'/' + config.NODE_ENV +
+      '" -d ' + config.DB_NAME +
+      ' -h ' + config.DB_HOST +
+      ' -u ' + config.DB_USER +
+      ' -p ' + config.DB_PORT +
+      ' -x ' + config.DB_PASSWORD +
+      ' -e ' + config.DB_DIALECT);
   }
 }
 
-module.exports Install;
+module.exports = Install;

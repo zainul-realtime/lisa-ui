@@ -1,9 +1,10 @@
 'use strict'
 
+const yaml = require('yamljs');
 const Project = use('App/Model/Project');
 const ProjectRepository = make('App/Repositories/Project');
 const Helpers = use('Helpers');
-var fs = require('fs');
+const fs = require('fs');
 
 class ProjectController {
 
@@ -62,6 +63,18 @@ class ProjectController {
     const project = yield ProjectRepository.find(request.param('id'))
 
     yield response.sendView('projects.show', { project: project.toJSON() });
+  }
+
+  * install(request, response) {
+
+    const project = yield ProjectRepository.find(request.param('id'));
+
+    const config = yaml.load(project.toJSON().env);
+
+    const installed = yield ProjectRepository.install(config, project.toJSON());
+
+    response.redirect('/projects');
+
   }
 
   * edit(request, response) {
