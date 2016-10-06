@@ -2,6 +2,8 @@
 
 const Project = use('App/Model/Project');
 const ProjectRepository = make('App/Repositories/Project');
+const Helpers = use('Helpers');
+var fs = require('fs');
 
 class ProjectController {
 
@@ -11,12 +13,45 @@ class ProjectController {
     yield response.sendView('projects.index', { projects: projects.toJSON() })
   }
 
+  * uploadAndMove(requestFile, response, dir, storagePath) {
+
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+
+    const fileUpload = requestFile;
+
+    const fileName = this.generateName(fileUpload.extension());
+
+    yield fileUpload.move(Helpers.storagePath(storagePath), String(fileName));
+
+    if (!fileUpload.moved()) {
+      response.badRequest(fileUpload.errors())
+      return
+    }
+
+    return fileUpload;
+  }
+
+  generateName(extention) {
+    return String(new Date().getTime()) + '&' + String(Math.floor(Math.random()*10000)) +'.'+ extention;
+  }
+
   * create(request, response) {
     yield response.sendView('projects.create')
   }
 
   * store(request, response) {
     const postData = request.only('name', 'description');
+
+    const requestFile = request.file('env', {
+        maxSize: '2mb',
+        allowedExtensions: ['yml', 'yaml']
+    })
+
+    const env = yield this.uploadAndMove(requestFile, response, './storage/projects', 'projects');
+
+    postData.env = env.uploadPath();
 
     yield Project.create(postData)
 
@@ -37,6 +72,19 @@ class ProjectController {
 
   * update(request, response) {
     const updatedData = request.only('name', 'description');
+
+    if (request.file('env').file.size && request.file('env').file.size !== 0) {
+
+      const requestFile = request.file('env', {
+          maxSize: '2mb',
+          allowedExtensions: ['yml', 'yaml']
+      })
+
+      const env = yield this.uploadAndMove(requestFile, response, './storage/projects', 'projects');
+
+      updatedData.env = env.uploadPath()
+
+    }
 
     const project = yield ProjectRepository.update(request.param('id'), updatedData)
 

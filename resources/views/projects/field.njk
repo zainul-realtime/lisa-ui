@@ -7,3 +7,9 @@
   {{ form.label('Description') }}
   {{ form.input('textarea', 'description', project.description, { class: 'form-control' }) }}
 </fieldset>
+
+
+<fieldset class="form-group">
+  {{ form.label('ENV') }}
+  {{ form.file('env',{ class: 'form-control' }) }}
+</fieldset>

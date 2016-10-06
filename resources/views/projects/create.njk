@@ -3,7 +3,7 @@
 {% block content %}
   <div>
     <h3>Create Project</h3>
-    {{ form.open({action: 'ProjectController.store'}) }}
+    {{ form.open({action: 'ProjectController.store'}, files:true ) }}
 
     {{ csrfField }}
 

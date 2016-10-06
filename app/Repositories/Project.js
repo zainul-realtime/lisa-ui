@@ -33,6 +33,7 @@ class ProjectRepository {
 
     project.name = options.name;
     project.description = options.description;
+    project.env = options.env;
 
     yield project.save()
 
@@ -48,6 +49,7 @@ class ProjectRepository {
 
     project.name = options.name;
     project.description = options.description;
+    project.env = options.env;
 
     yield project.save();
 
