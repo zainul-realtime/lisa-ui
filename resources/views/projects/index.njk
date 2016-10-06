@@ -1,47 +1,49 @@
 {% extends 'master' %}
 
 {% block content %}
-  <div>
     <br/>
     <a href="/projects/create" class="btn btn-success">
       New Project
     </a>
     <br/><br/>
-      {% for project in projects %}
-        <div class="col-sm-3">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <b>{{ project.name }}</b>
-            </div>
-            <div class="panel-body">
-              <p>{{ project.description }}</p>
-            </div>
-            <div class="panel-footer">
-              <div class='btn-group'>
-                {{ csrfField }}
-                <a href="/projects/{{ project.id }}" class="btn btn-xs btn-info">
-                  <i class="fa fa-eye" aria-hidden="true"></i>
-                </a>
-                <a href="/projects/{{ project.id }}/edit" class="btn btn-xs btn-warning">
-                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                </a>
-                <a href="/projects/{{ project.id }}/tasks" class="btn btn-xs btn-success">
-                  <i class="fa fa-tasks" aria-hidden="true"></i>
-                </a>
-              </div>
+    <div class="row">
 
-              <div style="float:right;">
-                {{ form.open({action: 'ProjectController.destroy', method: 'DELETE', params: { id: project.id } }) }}
-                  {{ csrfField }}
-                  <button type="submit" class="btn btn-xs btn-danger">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                  </button>
-                {{ form.close() }}
-              </div>
+        {% for project in projects %}
+          <div class="col-sm-3">
+              <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title">{{ project.name }}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  {{ project.description }}
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                  <div class='btn-group'>
+                    {{ csrfField }}
+                    <a href="/projects/{{ project.id }}" class="btn btn-xs btn-info">
+                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    </a>
+                    <a href="/projects/{{ project.id }}/edit" class="btn btn-xs btn-warning">
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </a>
+                    <a href="/projects/{{ project.id }}/tasks" class="btn btn-xs btn-success">
+                      <i class="fa fa-tasks" aria-hidden="true"></i>
+                    </a>
+                  </div>
 
-            </div>
+                  <div style="float:right;">
+                    {{ form.open({action: 'ProjectController.destroy', method: 'DELETE', params: { id: project.id } }) }}
+                      {{ csrfField }}
+                      <button type="submit" class="btn btn-xs btn-danger">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </button>
+                    {{ form.close() }}
+                  </div>
+                </div>
+              </div>
           </div>
-        </div>
-      {% endfor %}
-  </div>
+        {% endfor %}
+    </div>
 {% endblock %}
