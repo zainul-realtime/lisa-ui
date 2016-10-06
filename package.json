@@ -19,7 +19,15 @@
     "adonis-lucid": "^3.0.3",
     "adonis-middleware": "^1.0.7",
     "mysql": "^2.11.1",
-    "youch": "^1.0.1"
+    "youch": "^1.0.1",
+    "async": "^2.0.1",
+    "chalk": "^1.1.3",
+    "csv-parse": "^1.1.7",
+    "pg": "^6.1.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize-auto": "^0.4.15",
+    "sequelize-log-syntax-colors": "^1.0.0",
+    "yamljs": "^0.2.8"
   },
   "autoload": {
     "App": "./app"
