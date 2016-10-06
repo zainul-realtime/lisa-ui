@@ -2,6 +2,7 @@
 
 const FileItem = use('App/Model/FileItem');
 const FileItemRepository = make('App/Repositories/FileItem');
+const yaml = require('yamljs');
 const Helpers = use('Helpers');
 var fs = require('fs');
 
@@ -72,6 +73,24 @@ class FileItemController {
     yield FileItemRepository.delete(request.param('id'));
 
     yield response.redirect(this.baseRedirect(request.param('project_id')))
+  }
+
+  * execute(request, response) {
+    const fileItemEager = yield FileItem.query().where('id' ,request.param('id'))
+                          .with('task', 'task.project')
+                          .fetch();
+
+    const fileItem = fileItemEager.toJSON()[0];
+
+    const task = fileItem.task;
+
+    const project = task.project;
+
+    const config = yaml.load(project.env);
+
+    yield FileItemRepository.execute(config, task, fileItem, project);
+
+    return response.redirect('back')
   }
 
 }

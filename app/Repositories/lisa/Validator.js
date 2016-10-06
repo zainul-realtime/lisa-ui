@@ -1,16 +1,21 @@
 'use strict';
+var co = require('co');
 
 class Validator {
 
   constructor(options) {
     this.sequelize = options.sequelize;
+    this.config = options.config;
+    this.project = options.project;
+    this.task = options.task;
+    this.fileItem = options.fileItem;
     this.newRecordModel = {};
   }
 
   validationType(model, recordModel) {
 
     for (let key in recordModel) {
-      let Model = this.sequelize.import(__dirname + "/models/" + process.env.NODE_ENV +
+      let Model = this.sequelize.import("../../../models/" + this.project.id + "/" + this.config.NODE_ENV +
         "/" + model);
 
       let type = Model.tableAttributes[key].type.constructor.key;
@@ -49,50 +54,48 @@ class Validator {
 
           var columnFk = keyModel[key].source_column;
 
-          let createdModel = this.foreignKeySearch(objectSearch.foreignKeyModel, searchCriteria);
+          let createdModel = this.foreignKeySearch(objectSearch.foreignKeyModel, searchCriteria).next().value;
 
           this.newRecordModel[columnFk] = createdModel;
-
         }
 
       }
 
     }
 
-    return this.buildRecord(this.newRecordModel);
+    const record1 = this.buildRecord(this.newRecordModel);
+
+    return record1;
 
   }
 
-  async buildRecord(record) {
-    for (var key in record) {
-      if (typeof record[key].then == 'function') {
-        record[key] = await this.changeModelToId(record[key]);
+  buildRecord(record) {
+    return co(function *(){
+      for (var key in record) {
+        if (typeof record[key].then == 'function') {
+          const created = yield Promise.resolve(record[key]);
+          record[key] = Number(created.object.toJSON().id);
+        }
       }
-    }
-
-    return record;
-  }
-
-  changeModelToId(Model) {
-    return Model.then((res) => {
-      let object = res.object.toJSON();
-      return Number(object.id);
-    }).catch((res) => {
-      return null;
-    })
+      return record;
+    });
   }
 
   finishCallback(i, keyModel) {
     return Object.keys(keyModel).length === i;
   }
 
-  async foreignKeySearch(foreignKeyModel, searchCriteria) {
-    return await foreignKeyModel.findOrCreate({
+  * foreignKeySearch(foreignKeyModel, searchCriteria) {
+    
+    const model = yield foreignKeyModel.findOrCreate({
         where: searchCriteria,
         defaults: {}
-      }).spread((object, created) => {;
+      })
+      .spread((object, created) => {
         return {object, created};
       })
+
+    return model;
   }
 
   builderSearchKey(keyModel, mappers, modelName, key) {
@@ -115,15 +118,14 @@ class Validator {
 
   hasRootSearch(searchKey, sequelize, keyModel, key) {
     if (searchKey && searchKey.hasOwnProperty("rootSearch")) {
-      var foreignKeyModel = sequelize.import(__dirname + "/models/" +
-        process.env.NODE_ENV + "/" +
+      var foreignKeyModel = sequelize.import("../../../models/" + this.project.id + "/" +
+        this.config.NODE_ENV + "/" +
         searchKey['rootSearch']);
       searchKey = searchKey['column'];
 
     } else {
-
-      var foreignKeyModel = sequelize.import(__dirname + "/models/" +
-        process.env.NODE_ENV + "/" +
+      var foreignKeyModel = sequelize.import("../../../models/" + this.project.id + "/" +
+        this.config.NODE_ENV + "/" +
         keyModel[key].target_table);
 
     }

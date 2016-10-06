@@ -2,9 +2,11 @@
 
 class Transformer {
 
-  constructor() {}
+  constructor() {
+    this.prop = []
+  }
 
-  prop = [];
+  // prop = [];
 
   toModel(options, callback) {
     let record = {};
