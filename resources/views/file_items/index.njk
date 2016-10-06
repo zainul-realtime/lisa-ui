@@ -1,0 +1,47 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <br/>
+    <a href="/projects/{{ project_id }}/files/{{ file_id }}" class="btn btn-warning">
+      Back To Task
+    </a>
+    <br/><br/>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td><b>Name</b></td>
+          {# <td><b>Path</b></td> #}
+          <td><b>Download</b></td>
+        </tr>
+      </thead>
+      {% for file in file_items %}
+        <tr>
+          <td>{{ file.name }}</td>
+          {# <td>{{ file.files }}</td> #}
+          <td>
+            <a href="/file_items/{{ file.id }}">Dowload</a>
+          </td>
+          {# <td> #}
+            {# {{ form.open({action: 'TaskController.destroy', method: 'DELETE',
+             params: { project_id: project_id, id: file.id } }) }}
+            <div class='btn-group'>
+              {{ csrfField }}
+              <a href="/projects/{{ project_id }}/files/{{ file.id }}" class="btn btn-info">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+              </a>
+              <a href="/projects/{{ project_id }}/files/{{ file.id }}/edit" class="btn btn-warning">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              </a>
+              <a href="/projects/{{ project_id }}/files/{{ file.id }}/file_items" class="btn btn-primary">
+                <i class="fa fa-list" aria-hidden="true"></i>
+              </a>
+              {{ form.button('X', 'delete', { class: 'btn btn-danger' }) }}
+            <div>
+            {{ form.close() }} #}
+          {# </td> #}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

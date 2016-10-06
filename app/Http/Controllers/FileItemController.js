@@ -8,8 +8,8 @@ var fs = require('fs');
 class FileItemController {
   getParamId (request) {
     return {
-      task_id: request.param('task_id');
-      project_id: request.param('project_id');
+      task_id: request.param('task_id'),
+      project_id: request.param('project_id')
     }
   }
 
@@ -17,53 +17,16 @@ class FileItemController {
     return `/projects/${project_id}/tasks`;
   }
 
-  * uploadAndMove(request, response) {
-
-    var dir = './storage/getParamIds';
-
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
-    }
-
-    const yaml = request.file('csv', {
-        maxSize: '2mb',
-        allowedExtensions: ['csv']
-    })
-    const fileName = this.generateName(yaml.extension());
-
-    yield yaml.move(Helpers.storagePath('getParamIds'), String(fileName));
-
-    if (!yaml.moved()) {
-      response.badRequest(yaml.errors())
-      return
-    }
-
-    return yaml;
-  }
-
-  generateName(extention) {
-    return String(new Date().getTime()) + String(Math.floor(Math.random()*10000)) +'.'+ extention;
-  }
-
   * index(request, response) {
     const file_items = yield FileItem
                                 .query()
                                 .where('task_id', request.param('task_id'))
-                                .fetch();;
+                                .fetch();
 
-    yield response.sendView('file_items.index',
-      {
-        file_items: file_items.toJSON(),
-        project_id: this.getParamId(request).project_id,
-        task_id: this.getParamId(request).task_id
-      })
-  }
+    const responseData = this.getParamId(request);
+    responseData.file_items = file_items.toJSON()
 
-  * create(request, response) {
-    yield response.sendView('file_items.create', {
-      project_id: this.getParamId(request).project_id,
-      task_id: this.getParamId(request).task_id
-    } )
+    yield response.sendView('file_items.index', responseData)
   }
 
   * store(request, response) {
@@ -79,16 +42,12 @@ class FileItemController {
     response.redirect(this.baseRedirect(postData.project_id));
   }
 
-  * show(request, response) {
-    const file_item = yield FileItemRepository.find(request.param('id'))
+  * download(request, response) {
+    const file_item = yield FileItemRepository.find(request.param('id'));
 
-    yield response.sendView('file_items.show', { file_item: file_item.toJSON() });
-  }
+    const filename = file_item.toJSON().files.split('/')[file_item.toJSON().files.split('/').length-1];
 
-  * edit(request, response) {
-    const file_item = yield FileItemRepository.find(request.param('id'))
-
-    yield response.sendView('file_items.edit', { file_item: file_item.toJSON(), project_id: this.getParamId(request) })
+    response.attachment(Helpers.storagePath('file_items/'+filename, filename));
   }
 
   * update(request, response) {
