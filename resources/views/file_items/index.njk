@@ -13,6 +13,7 @@
           <td><b>Name</b></td>
           {# <td><b>Path</b></td> #}
           <td><b>Download</b></td>
+          <td><b>Action</b></td>
         </tr>
       </thead>
       {% for file in file_items %}
@@ -22,8 +23,8 @@
           <td>
             <a href="/file_items/{{ file.id }}">Dowload</a>
           </td>
-          {# <td> #}
-            {# {{ form.open({action: 'TaskController.destroy', method: 'DELETE',
+          <td>
+            {# {{ form.open({action: 'FileItemController.destroy', method: 'DELETE',
              params: { project_id: project_id, id: file.id } }) }}
             <div class='btn-group'>
               {{ csrfField }}
@@ -39,7 +40,7 @@
               {{ form.button('X', 'delete', { class: 'btn btn-danger' }) }}
             <div>
             {{ form.close() }} #}
-          {# </td> #}
+          </td>
         </tr>
       {% endfor %}
     </table>
