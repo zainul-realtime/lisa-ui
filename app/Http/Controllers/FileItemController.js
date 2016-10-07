@@ -90,7 +90,7 @@ class FileItemController {
 
     yield FileItemRepository.execute(config, task, fileItem, project);
 
-    return response.redirect('back')
+    yield response.redirect('back')
   }
 
 }

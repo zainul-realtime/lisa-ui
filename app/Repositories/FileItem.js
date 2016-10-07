@@ -11,6 +11,7 @@ var path = require('path');
 var parse = require('csv-parse/lib/sync');
 var async = require('async');
 const yaml = require('yamljs');
+const ExecuteLogRepository = make('App/Repositories/ExecuteLog');
 
 class FileItemRepository {
 
@@ -113,23 +114,41 @@ class FileItemRepository {
 
         var record = results[i];
 
-        var recordHasValidRelation = validation.belongsToCheck(keyModel, mappers, model, record);
+        var recordHasValidRelation = validation.belongsToCheck(
+                                              keyModel, mappers, model, record);
 
         recordHasValidRelation.then((modelWithForeignKey) => {
-          var Model = sequelize.import("../../models/" + project.id + "/" + config.NODE_ENV + "/" + model);
+          var Model = sequelize.import("../../models/" + project.id + "/"
+                                                + config.NODE_ENV + "/" + model);
 
           let validModel = validation.validationType(model, modelWithForeignKey);
 
           Model.create(validModel)
             .then((savedModel) => {
-              console.log(savedModel.toJSON())
+              yield ExecuteLogRepository.create({
+                status:'success',
+                response: JSON.stringify(savedModel.toJSON()),
+                process: 'saved model',
+                file_item_id: fileItem.id
+              })
             })
             .catch((err) => {
-              console.log(err.sql)
-              console.log(err.original)
-              console.log(err.original.detail)
+              yield ExecuteLogRepository.create({
+                status:'error',
+                response: JSON.stringify(err.original),
+                process: 'saved model',
+                sql: err.sql,
+                exceptions: err.original.detail,
+                file_item_id: fileItem.id
+              })
             });
         }).catch((err) => {
+          yield ExecuteLogRepository.create({
+            status:'error',
+            response: JSON.stringify(err),
+            process: 'belongs to check model',
+            file_item_id: fileItem.id
+          })
         })
       }
     });
