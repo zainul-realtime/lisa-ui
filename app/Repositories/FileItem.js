@@ -12,6 +12,7 @@ var parse = require('csv-parse/lib/sync');
 var async = require('async');
 const yaml = require('yamljs');
 const ExecuteLogRepository = make('App/Repositories/ExecuteLog');
+const Event = use('Event')
 
 class FileItemRepository {
 
@@ -82,7 +83,7 @@ class FileItemRepository {
     return true
   }
 
-  * execute(config, task, fileItem, project) {
+  execute(config, task, fileItem, project) {
     let db = new DB();
 
     let sequelize = db.setORM(Sequelize, config);
@@ -99,7 +100,6 @@ class FileItemRepository {
     })
 
     var mappers = yaml.load(task.yaml);
-
     auto.run(function (err) {
       if (err) throw err;
 
@@ -116,24 +116,23 @@ class FileItemRepository {
 
         var recordHasValidRelation = validation.belongsToCheck(
                                               keyModel, mappers, model, record);
-
         recordHasValidRelation.then((modelWithForeignKey) => {
           var Model = sequelize.import("../../models/" + project.id + "/"
-                                                + config.NODE_ENV + "/" + model);
+                                                + config.NODE_ENV + "/" + fileItem.name);
 
-          let validModel = validation.validationType(model, modelWithForeignKey);
+          let validModel = validation.validationType(fileItem.name, modelWithForeignKey);
 
           Model.create(validModel)
-            .then((savedModel) => {
-              yield ExecuteLogRepository.create({
+            .then(function (savedModel) {
+              Event.fire('SaveOrUpdate.log',{
                 status:'success',
                 response: JSON.stringify(savedModel.toJSON()),
                 process: 'saved model',
                 file_item_id: fileItem.id
               })
             })
-            .catch((err) => {
-              yield ExecuteLogRepository.create({
+            .catch(function (err) {
+              Event.fire('SaveOrUpdate.log',{
                 status:'error',
                 response: JSON.stringify(err.original),
                 process: 'saved model',
@@ -142,8 +141,8 @@ class FileItemRepository {
                 file_item_id: fileItem.id
               })
             });
-        }).catch((err) => {
-          yield ExecuteLogRepository.create({
+        }).catch(function (err) {
+          Event.fire('SaveOrUpdate.log', {
             status:'error',
             response: JSON.stringify(err),
             process: 'belongs to check model',

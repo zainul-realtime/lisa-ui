@@ -88,9 +88,9 @@ class FileItemController {
 
     const config = yaml.load(project.env);
 
-    yield FileItemRepository.execute(config, task, fileItem, project);
+    FileItemRepository.execute(config, task, fileItem, project);
 
-    yield response.redirect('back')
+    response.redirect('back')
   }
 
 }
