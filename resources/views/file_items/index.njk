@@ -3,17 +3,18 @@
 {% block content %}
   <div>
     <br/>
-    <a href="/projects/{{ project_id }}/files/{{ file_id }}" class="btn btn-warning">
+    <a href="/projects/{{ project_id }}/tasks" class="btn btn-warning">
       Back To Task
     </a>
     <br/><br/>
     <table class="table table-striped">
       <thead>
         <tr>
-          <td><b>Name</b></td>
+          <td style="width:80%;"><b>Name</b></td>
           {# <td><b>Path</b></td> #}
           <td><b>Download</b></td>
           <td><b>Action</b></td>
+          <td><b>View Logs</b></td>
         </tr>
       </thead>
       {% for file in file_items %}
@@ -21,26 +22,23 @@
           <td>{{ file.name }}</td>
           {# <td>{{ file.files }}</td> #}
           <td>
-            <a href="/file_items/{{ file.id }}">Dowload</a>
+            <a href="/file_items/{{ file.id }}" class="btn btn-primary">
+              <i class="fa fa-download" aria-hidden="true"></i>
+              <b>Download</b>
+            </a>
           </td>
           <td>
-            <a href="/file_items/exe/{{ file.id }}">Do it</a>
-            {# {{ form.open({action: 'FileItemController.destroy', method: 'DELETE',
-             params: { project_id: project_id, id: file.id } }) }}
-            <div class='btn-group'>
-              {{ csrfField }}
-              <a href="/projects/{{ project_id }}/files/{{ file.id }}" class="btn btn-info">
-                <i class="fa fa-eye" aria-hidden="true"></i>
-              </a>
-              <a href="/projects/{{ project_id }}/files/{{ file.id }}/edit" class="btn btn-warning">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-              </a>
-              <a href="/projects/{{ project_id }}/files/{{ file.id }}/file_items" class="btn btn-primary">
-                <i class="fa fa-list" aria-hidden="true"></i>
-              </a>
-              {{ form.button('X', 'delete', { class: 'btn btn-danger' }) }}
-            <div>
-            {{ form.close() }} #}
+            <a href="/file_items/exe/{{ file.id }}" class="btn btn-danger">
+              <i class="fa fa-play" aria-hidden="true"></i>
+              <b>Do Import</b>
+            </a>
+          </td>
+          <td>
+            <a href="/projects/{{ project_id }}/tasks/{{ task_id }}/file_items/{{ file.id }}"
+            class="btn btn-warning">
+              <i class="fa fa-list" aria-hidden="true"></i>
+              <b>View Logs</b>
+            </a>
           </td>
         </tr>
       {% endfor %}

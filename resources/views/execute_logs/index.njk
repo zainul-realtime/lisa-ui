@@ -1,0 +1,29 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <br/>
+    <a href="/projects/{{ project_id }}/tasks/{{ task_id }}/file_items" class="btn btn-warning">
+      Back To FileItem
+    </a>
+    <br/><br/>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td><b>Process</b></td>
+          <td><b>Status</b></td>
+          <td><b>Response</b></td>
+          <td><b>Exception</b></td>
+        </tr>
+      </thead>
+      {% for log in execute_logs %}
+        <tr>
+          <td>{{ log.process }}</td>
+          <td>{{ log.status }}</td>
+          <td>{{ log.response }}</td>
+          <td>{{ log.exceptions }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}
