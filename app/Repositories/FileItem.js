@@ -128,7 +128,8 @@ class FileItemRepository {
                 status:'success',
                 response: JSON.stringify(savedModel.toJSON()),
                 process: 'saved model',
-                file_item_id: fileItem.id
+                file_item_id: fileItem.id,
+                data: JSON.stringify(validModel)
               })
             })
             .catch(function (err) {
@@ -138,7 +139,8 @@ class FileItemRepository {
                 process: 'saved model',
                 sql: err.sql,
                 exceptions: err.original.detail,
-                file_item_id: fileItem.id
+                file_item_id: fileItem.id,
+                data: JSON.stringify(validModel)
               })
             });
         }).catch(function (err) {

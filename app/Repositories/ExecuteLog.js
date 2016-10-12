@@ -38,6 +38,7 @@ class ExecuteLogRepository {
     executeLog.data = options.data;
     executeLog.process = options.process;
     executeLog.exceptions = options.exceptions;
+    executeLog.file_item_id = options.file_item_id;
     // executeLog.user_id = options.user_id;
 
     yield executeLog.save()
@@ -59,6 +60,7 @@ class ExecuteLogRepository {
     executeLog.data = options.data;
     executeLog.process = options.process;
     executeLog.exceptions = options.exceptions;
+    executeLog.file_item_id = options.file_item_id;
     // executeLog.user_id = options.user_id;
 
     yield executeLog.save();

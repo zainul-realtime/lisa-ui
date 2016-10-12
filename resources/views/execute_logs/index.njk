@@ -10,17 +10,29 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <td><b>Date</b></td>
           <td><b>Process</b></td>
-          <td><b>Status</b></td>
-          <td><b>Response</b></td>
+          <td>
+            <b>Status</b>
+          </td>
           <td><b>Exception</b></td>
         </tr>
       </thead>
       {% for log in execute_logs %}
         <tr>
+          <td>{{ log.created_at }}</td>
           <td>{{ log.process }}</td>
-          <td>{{ log.status }}</td>
-          <td>{{ log.response }}</td>
+          <td>
+            {% if log.status == 'error' %}
+              <span class="label label-danger">
+                <b>{{ log.status }}</b>
+              </span>
+            {% elif log.status == 'success' %}
+              <span class="label label-success">
+                <b>{{ log.status }}</b>
+              </span>
+            {% endif %}
+          </td>
           <td>{{ log.exceptions }}</td>
         </tr>
       {% endfor %}
