@@ -16,6 +16,7 @@
             <b>Status</b>
           </td>
           <td><b>Exception</b></td>
+          <td><b>Response</b></td>
         </tr>
       </thead>
       {% for log in execute_logs %}
@@ -34,6 +35,13 @@
             {% endif %}
           </td>
           <td>{{ log.exceptions }}</td>
+          <td>
+            {% for name, item in (log.response) %}
+              <li>
+                {{ name }} : {{ item }}
+              </li>
+            {% endfor %}
+          </td>
         </tr>
       {% endfor %}
     </table>

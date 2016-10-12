@@ -127,7 +127,7 @@ class FileItemRepository {
               Event.fire('SaveOrUpdate.log',{
                 status:'success',
                 response: JSON.stringify(savedModel.toJSON()),
-                process: 'saved model',
+                process: 'saving model',
                 file_item_id: fileItem.id,
                 data: JSON.stringify(validModel)
               })
@@ -136,7 +136,7 @@ class FileItemRepository {
               Event.fire('SaveOrUpdate.log',{
                 status:'error',
                 response: JSON.stringify(err.original),
-                process: 'saved model',
+                process: 'saving model',
                 sql: err.sql,
                 exceptions: err.original.detail,
                 file_item_id: fileItem.id,
@@ -147,7 +147,7 @@ class FileItemRepository {
           Event.fire('SaveOrUpdate.log', {
             status:'error',
             response: JSON.stringify(err),
-            process: 'belongs to check model',
+            process: 'checking belongsto model',
             file_item_id: fileItem.id
           })
         })
