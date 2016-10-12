@@ -34,6 +34,14 @@ class ProjectController {
     return fileUpload;
   }
 
+  * download(request, response) {
+    const project = yield ProjectRepository.find(request.param('id'));
+
+    const projectenv = project.toJSON().env.split('/')[project.toJSON().env.split('/').length-1];
+
+    response.attachment(Helpers.storagePath('projects/'+projectenv, projectenv));
+  }
+
   generateName(extention) {
     return String(new Date().getTime()) + '&' + String(Math.floor(Math.random()*10000)) +'.'+ extention;
   }

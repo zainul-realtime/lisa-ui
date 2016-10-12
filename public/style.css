@@ -41,3 +41,20 @@ thead {
     background-color: #0095a8;
     border-color: #00acc1;
 }
+
+.content-wrapper, .right-side {
+    min-height: 100%;
+    background-color: #eaeaea;
+    z-index: 800;
+}
+
+.project-item {
+  border-right: solid 1px #dedede;
+  border-left: solid 1px #d0d0d0;
+  border-bottom: solid 1px #b5b5b5;
+}
+
+.project-item-header {
+  background: rgb(7, 133, 136);
+  color: #f9f9f9;
+}

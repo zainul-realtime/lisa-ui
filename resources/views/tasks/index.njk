@@ -37,6 +37,9 @@
               <a href="/projects/{{ project_id }}/tasks/{{ task.id }}/file_items" class="btn btn-primary">
                 <i class="fa fa-list" aria-hidden="true"></i>
               </a>
+              <a href="/tasks/yaml/{{ task.id }}" class="btn btn-success">
+                <i class="fa fa-download" aria-hidden="true"></i>
+              </a>
               {{ form.button('X', 'delete', { class: 'btn btn-danger' }) }}
             <div>
             {{ form.close() }}

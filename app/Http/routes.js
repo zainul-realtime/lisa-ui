@@ -31,7 +31,10 @@ Route.put('projects/:project_id/tasks/:id', 'TaskController.update')
 Route.delete('projects/:project_id/tasks/:id', 'TaskController.destroy')
 
 Route.get('projects/:project_id/tasks/:task_id/file_items', 'FileItemController.index')
+Route.get('projects/:project_id/tasks/:task_id/file_items/:file_id', 'ExecuteLogController.index')
+
 Route.get('/file_items/:id', 'FileItemController.download');
 Route.get('/file_items/exe/:id', 'FileItemController.execute');
 
-Route.get('projects/:project_id/tasks/:task_id/file_items/:file_id', 'ExecuteLogController.index')
+Route.get('/tasks/yaml/:id', 'TaskController.download');
+Route.get('/projects/yaml/:id', 'ProjectController.download');

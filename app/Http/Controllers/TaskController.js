@@ -52,6 +52,14 @@ class TaskController {
       })
   }
 
+  * download(request, response) {
+    const task = yield TaskRepository.find(request.param('id'));
+
+    const taskyaml = task.toJSON().yaml.split('/')[task.toJSON().yaml.split('/').length-1];
+
+    response.attachment(Helpers.storagePath('tasks/'+taskyaml, taskyaml));
+  }
+
   * create(request, response) {
     yield response.sendView('tasks.create', {project_id: this.getProjectId(request)} )
   }
