@@ -19,3 +19,13 @@ thead {
   background: #00acc1 !important;
   color: #ecf0f5 !important;
 }
+
+.btn-success, .btn-success:hover, .btn-success:active, .btn-success:visited {
+    background-color: #0e555b !important;
+    border-color: #0e555b !important;
+}
+
+.btn-info, .btn-info:hover, .btn-info:active, .btn-info:visited {
+    background-color: #05668D !important;
+    border-color: #05668D !important;
+}
