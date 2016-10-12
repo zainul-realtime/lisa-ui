@@ -1,0 +1,7 @@
+DB_NAME: reload
+DB_USER: root
+DB_PASSWORD: 
+DB_DIALECT: mysql
+DB_PORT: 3306
+DB_HOST: localhost
+NODE_ENV: development
