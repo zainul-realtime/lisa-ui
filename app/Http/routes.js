@@ -33,7 +33,7 @@ Route.delete('projects/:project_id/tasks/:id', 'TaskController.destroy')
 Route.get('projects/:project_id/tasks/:task_id/file_items', 'FileItemController.index')
 Route.get('/file_items/:id', 'FileItemController.download');
 Route.get('/file_items/exe/:id', 'FileItemController.execute');
-
+Route.resources('execute_logs', 'ExecuteLogController')
 // Route.get('projects/:project_id/tasks/create', 'TaskController.create')
 // Route.get('projects/:project_id/tasks/:id', 'TaskController.show')
 // Route.get('projects/:project_id/tasks/:id/edit', 'TaskController.edit')
