@@ -18,6 +18,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 
   <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css"/>
   <!-- Theme style -->
   <link rel="stylesheet" href="/admin-lte/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -406,12 +408,30 @@ desired effect
 <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- SlimScroll -->
 <script src="/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/admin-lte/js/app.min.js"></script>
 
 <script>
   $(function () {
     $(".data-table").DataTable();
+    $(".data-table-sql").DataTable({
+        scrollX: true,
+        fixedColumns: true,
+        scrollY: "500px",
+        dom: 'Bfrtip',
+        buttons: [
+          {
+            extend: 'csv',
+            title: 'Exporter Data By SQL Query'
+          }
+        ]
+    });
   });
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

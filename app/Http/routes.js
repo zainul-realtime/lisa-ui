@@ -39,4 +39,5 @@ Route.get('/file_items/exe/:id', 'FileItemController.execute');
 Route.get('/tasks/yaml/:id', 'TaskController.download');
 Route.get('/projects/yaml/:id', 'ProjectController.download');
 
-Route.get('/exporters/sql/editor', 'ExporterController.sqlEditor');
+Route.get('/exporters/sql/editor/:project_id', 'ExporterController.sqlEditor');
+Route.post('/exporters/sql/editor/:project_id', 'ExporterController.runSql');

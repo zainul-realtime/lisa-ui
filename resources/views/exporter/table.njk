@@ -1,0 +1,18 @@
+<table class="table table-striped table-bordered data-table-sql">
+  <thead>
+    <tr>
+      {% for name in column %}
+      <td style="width:200px;"><b>{{ name }}</b></td>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in data %}
+      <tr>
+        {% for name in column %}
+          <td>{{ row[name] }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
