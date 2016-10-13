@@ -11,20 +11,34 @@
       {% if query %}
         {{ form.input('textarea', 'query', query, { class: 'form-control', id: 'sql-editor' }) }}
       {% else %}
-        <textarea class="form-control" id="sql-editor" name="query"></textarea>
+        <textarea class="form-control" id="sql-editor" name="query">SELECT * FROM users</textarea>
       {% endif %}
 
       <br/>
 
-      <button class="btn btn-warning pull-right" type="submit">
-        <i class="fa fa-play" aria-hidden="true"></i>
-        Run
-      </button>
+      <div class="row">
+
+        <div class="col-sm-3">
+          <select class="form-control list-select-table">
+            <option>Choose table</option>
+            {% for table in tables %}
+              <option>{{ table }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-sm-9">
+          <button class="btn btn-warning pull-right" type="submit">
+            <i class="fa fa-play" aria-hidden="true"></i>
+            Run
+          </button>
+        </div>
+
+      </div>
+
 
     {{ form.close() }}
   </div>
-
-  <br/>
 
   <hr/>
 

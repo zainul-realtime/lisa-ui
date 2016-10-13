@@ -7,6 +7,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/mode/sql/sql.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/sql-hint.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/show-hint.js"></script>
+
   <script>
     window.onload = function() {
       var mime = 'text/x-mariadb';
@@ -15,15 +16,21 @@
         mode: mime,
         indentWithTabs: true,
         smartIndent: true,
+        indentUnit: 2,
         lineNumbers: true,
         matchBrackets : true,
+        autoClearEmptyLines: true,
+        lineWrapping: true,
         autofocus: true,
         theme: 'monokai',
         extraKeys: {"Ctrl-Space": "autocomplete"},
-        // hintOptions: {tables: {
-        //   users: {name: null, score: null, birthDate: null},
-        //   countries: {name: null, population: null, size: null}
-        // }}
+        hintOptions: {
+          tables: {
+            {% for table in tables %}
+              {{ table }} : {},
+            {% endfor %}
+          }
+        }
       });
     };
   </script>

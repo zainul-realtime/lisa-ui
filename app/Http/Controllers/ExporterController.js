@@ -2,6 +2,7 @@
 
 const ExporterRepository = make('App/Repositories/Exporter');
 const ProjectRepository = make('App/Repositories/Project');
+const fs = require('fs');
 const yaml = require('yamljs');
 
 class ExporterController {
@@ -28,9 +29,30 @@ class ExporterController {
     }
   }
 
+  removeExtention(array) {
+    for (var i = 0; i < array.length; i++) {
+      array[i] = array[i].split('.')[0];
+    }
+    return array;
+  }
+
+  listTables(project) {
+    const config = yaml.load(project.toJSON().env);
+
+    const files = this.removeExtention(
+      fs.readdirSync('./models/'+ project.toJSON()['id'] + '/' + config.NODE_ENV)
+    );
+
+    return files;
+  }
+
   * sqlEditor(request, response) {
+
+    const project = yield ProjectRepository.find(request.param('project_id'));
+
     yield response.sendView('exporter.editor',{
-      project_id: this.getProjectId(request)
+      project_id: this.getProjectId(request),
+      tables: this.listTables(project)
     })
   }
 
@@ -39,13 +61,12 @@ class ExporterController {
 
     const project = yield ProjectRepository.find(request.param('project_id'));
 
-    console.log(this.validateNonSelect(postData.query))
-
     if (this.validateNonSelect(postData.query)) {
 
       yield response.sendView('exporter.editor',{
         project_id: this.getProjectId(request),
-        query: postData.query
+        query: postData.query,
+        tables: this.listTables(project)
       })
 
     }else {
@@ -58,7 +79,8 @@ class ExporterController {
         project_id: this.getProjectId(request),
         data: data,
         column: this.buildColumn(data[0]),
-        query: postData.query
+        query: postData.query,
+        tables: this.listTables(project)
       })
     }
   }
