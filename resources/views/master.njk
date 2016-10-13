@@ -30,6 +30,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <link rel="stylesheet" href="/style.css">
 
+  <script src='https://www.google.com/recaptcha/api.js'></script>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -445,4 +446,17 @@ desired effect
      user experience. Slimscroll is required when using the
      fixed layout. -->
 </body>
+{# {% if currentUser %}
+
+{% else %}
+  <body class="hold-transition login-page">
+    {% block contentLogin %}{% endblock %}
+  <!-- /.login-box -->
+
+  <!-- jQuery 2.2.3 -->
+  <script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+{% endif %} #}
 </html>
