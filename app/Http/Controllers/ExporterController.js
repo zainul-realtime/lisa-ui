@@ -19,6 +19,15 @@ class ExporterController {
     return array;
   }
 
+  validateNonSelect(query) {
+    const splitedQuery = query.split(' ');
+    if (splitedQuery[0].toLowerCase() === 'select') {
+      return false;
+    }else {
+      return true;
+    }
+  }
+
   * sqlEditor(request, response) {
     yield response.sendView('exporter.editor',{
       project_id: this.getProjectId(request)
@@ -30,16 +39,28 @@ class ExporterController {
 
     const project = yield ProjectRepository.find(request.param('project_id'));
 
-    const config = yaml.load(project.toJSON().env);
+    console.log(this.validateNonSelect(postData.query))
 
-    const data = yield ExporterRepository.run(config, postData.query);
+    if (this.validateNonSelect(postData.query)) {
 
-    yield response.sendView('exporter.editor',{
-      project_id: this.getProjectId(request),
-      data: data,
-      column: this.buildColumn(data[0]),
-      query: postData.query
-    })
+      yield response.sendView('exporter.editor',{
+        project_id: this.getProjectId(request),
+        query: postData.query
+      })
+
+    }else {
+
+      const config = yaml.load(project.toJSON().env);
+
+      const data = yield ExporterRepository.run(config, postData.query);
+
+      yield response.sendView('exporter.editor',{
+        project_id: this.getProjectId(request),
+        data: data,
+        column: this.buildColumn(data[0]),
+        query: postData.query
+      })
+    }
   }
 
 }
