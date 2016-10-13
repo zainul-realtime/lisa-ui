@@ -1,0 +1,40 @@
+{% extends 'master' %}
+
+{% block content %}
+  <div>
+    <textarea class="form-control" id="sql-editor"></textarea>
+    <br/>
+    <button class="btn btn-warning pull-right">
+      <i class="fa fa-play" aria-hidden="true"></i>
+      Run
+    </button>
+  </div>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/codemirror.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/show-hint.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/theme/monokai.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/codemirror.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/mode/sql/sql.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/sql-hint.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/show-hint.js"></script>
+  <script>
+    window.onload = function() {
+      var mime = 'text/x-mariadb';
+
+      window.editor = CodeMirror.fromTextArea(document.getElementById('sql-editor'), {
+        mode: mime,
+        indentWithTabs: true,
+        smartIndent: true,
+        lineNumbers: true,
+        matchBrackets : true,
+        autofocus: true,
+        theme: 'monokai',
+        extraKeys: {"Ctrl-Space": "autocomplete"},
+        hintOptions: {tables: {
+          users: {name: null, score: null, birthDate: null},
+          countries: {name: null, population: null, size: null}
+        }}
+      });
+    };
+  </script>
+{% endblock %}
