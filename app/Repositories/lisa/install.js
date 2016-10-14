@@ -6,7 +6,7 @@ class Install {
   }
 
   * setupDependecies(config, project) {
-    const pwd = '';
+    let pwd = '';
 
     if (config.DB_PASSWORD != null) {
       pwd = ' -x ' + config.DB_PASSWORD;

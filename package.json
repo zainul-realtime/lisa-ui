@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch app --watch bootstrap --watch config --watch .env -x \"node --harmony_proxies\" server.js",
-    "start": "node --harmony_proxies server.js"
+    "start": "node --harmony_proxies server.js",
+    "pretest": "ENV_PATH=.env.test ./ace migration:run",
+    "test": "node --harmony_proxies bin/test.js",
+    "posttest": "ENV_PATH=.env.test ./ace migration:rollback"
   },
   "author": "",
   "license": "MIT",
@@ -35,6 +38,20 @@
     "App": "./app"
   },
   "devDependencies": {
-    "nodemon": "^1.9.1"
+    "chai": "^3.5.0",
+    "co": "^4.6.0",
+    "co-fs": "^1.2.0",
+    "co-mocha": "^1.1.2",
+    "colors": "^1.1.2",
+    "globby": "^6.0.0",
+    "lodash": "^4.13.1",
+    "mailparser": "^0.6.1",
+    "mocha": "^2.5.3",
+    "ms": "^0.7.1",
+    "nodemon": "^1.9.1",
+    "sqlite3": "^3.1.4",
+    "standard": "^7.1.2",
+    "supertest": "^2.0.0",
+    "yargs": "^4.8.1"
   }
 }
