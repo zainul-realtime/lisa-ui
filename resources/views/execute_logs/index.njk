@@ -11,6 +11,7 @@
     <table class="table table-striped data-table">
       <thead>
         <tr>
+          <td><b>Id</b></td>
           <td><b>Date</b></td>
           <td><b>Process</b></td>
           <td>
@@ -22,6 +23,7 @@
       </thead>
       {% for log in execute_logs %}
         <tr>
+          <td>{{ log.id }}</td>
           <td>{{ log.created_at }}</td>
           <td>{{ log.process }}</td>
           <td>

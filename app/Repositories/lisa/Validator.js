@@ -85,8 +85,8 @@ class Validator {
     return Object.keys(keyModel).length === i;
   }
 
-  * foreignKeySearch(foreignKeyModel, searchCriteria) {
-    
+  * foreignKeySearch(foreignKeyModel, searchCriteria, recordModel) {
+
     const model = yield foreignKeyModel.findOrCreate({
         where: searchCriteria,
         defaults: {}
@@ -94,6 +94,9 @@ class Validator {
       .spread((object, created) => {
         return {object, created};
       })
+      // .catch((err) => {
+      //   return {err, searchCriteria};
+      // })
 
     return model;
   }

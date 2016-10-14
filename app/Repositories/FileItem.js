@@ -116,6 +116,7 @@ class FileItemRepository {
 
         var recordHasValidRelation = validation.belongsToCheck(
                                               keyModel, mappers, model, record);
+
         recordHasValidRelation.then((modelWithForeignKey) => {
           var Model = sequelize.import("../../models/" + project.id + "/"
                                                 + config.NODE_ENV + "/" + fileItem.name);
@@ -144,11 +145,13 @@ class FileItemRepository {
               })
             });
         }).catch(function (err) {
+          // console.log(err)
           Event.fire('SaveOrUpdate.log', {
             status:'error',
-            response: JSON.stringify(err),
+            response: JSON.stringify(err.err),
             process: 'checking belongsto model',
-            file_item_id: fileItem.id
+            file_item_id: fileItem.id,
+            exceptions: JSON.stringify(err.searchCriteria)
           })
         })
       }
