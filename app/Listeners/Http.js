@@ -12,6 +12,11 @@ const Http = exports = module.exports = {}
  * @param  {Object} response
  */
 Http.handleError = function * (error, request, response) {
+
+  if (error.name === 'InvalidLoginException') {
+    return response.redirect('/login')
+  }
+
   /**
    * DEVELOPMENT REPORTER
    */

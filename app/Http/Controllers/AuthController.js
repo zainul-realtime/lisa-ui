@@ -28,7 +28,7 @@ class AuthController {
   * logout(request, response) {
     yield request.auth.logout()
 
-    return response.redirect('/')
+    return response.redirect('/login')
   }
 
 
