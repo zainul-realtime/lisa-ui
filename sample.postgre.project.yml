@@ -1,6 +1,6 @@
 DB_NAME: healthcare
 DB_USER: zainul
-DB_PASSWORD: Realtime1!
+DB_PASSWORD: WarkopDKI
 DB_DIALECT: postgres
 DB_PORT: 5432
 DB_HOST: localhost
