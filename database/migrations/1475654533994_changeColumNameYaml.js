@@ -12,7 +12,7 @@ class ChangeColumNameYamlSchema extends Schema {
 
   down () {
     this.table('yamls', (table) => {
-      table.renameColumn('data', 'env')
+      // table.renameColumn('data', 'env')
       // opposite of up goes here
     })
   }

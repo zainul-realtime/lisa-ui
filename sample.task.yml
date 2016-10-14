@@ -1,0 +1,25 @@
+contacts:
+  supplier_type_id: name
+
+users:
+  role_id: name
+
+persons:
+  address_id: address_line1
+  next_of_kin_id: email
+  user_id: email
+
+positions:
+  parent_level_id: name
+
+employees:
+  person_id: email
+  report_manager_id:
+    rootSearch: employees
+    column: email
+
+employee_positions:
+  employee_id:
+    rootSearch: persons
+    column: first_name
+  position_id: name

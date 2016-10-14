@@ -14,7 +14,7 @@ class YamlsSchema extends Schema {
   }
 
   down () {
-    this.drop('yamls')
+    // this.drop('yamls')
   }
 
 }
