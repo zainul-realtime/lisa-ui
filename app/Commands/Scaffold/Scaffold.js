@@ -5,6 +5,7 @@ const BaseGenerator = require('./Base')
 const path = require('path')
 const Ioc = require('adonis-fold').Ioc
 const Helpers = Ioc.use('Adonis/Src/Helpers')
+const i = require('inflect')
 
 class Scaffold extends BaseGenerator {
 
@@ -35,8 +36,10 @@ class Scaffold extends BaseGenerator {
 
     try {
       yield this.write(template, toPath, templateOptions)
-      this._success(toPath)
-      // this._createMigration(options, name)
+      this._success(toPath);
+      this.run('make:migration', [name], {
+        create: table.entityName.toLowerCase()
+      })
     } catch (e) {
       this._error(e.message)
     }
