@@ -45,6 +45,23 @@ class Scaffold extends BaseGenerator {
     }
   }
 
+  * makeRepository(name) {
+    const entity = this._makeEntityName(name, 'model', false, 'singular')
+    const toPath = path.join(this.helpers.appPath(), 'Repositories', `${entity.entityPath}.js`)
+    const template = 'repository'
+    const templateOptions = {
+      name: entity.entityName,
+      lowerName: table.entityName.toLowerCase()
+    }
+    try {
+      yield this.write(template, toPath, templateOptions)
+      this._success(toPath);
+    } catch (e) {
+      this._error(e.message)
+    }
+
+  }
+
   get signature () {
     return 'scaffold {name}'
   }
