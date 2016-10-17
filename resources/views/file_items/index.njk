@@ -8,6 +8,41 @@
       Back To Task
     </a>
     <br/><br/>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <td>
+            {{ form.label('Name') }}
+          </td>
+          <td>
+            {{ form.label('File Data') }}
+          </td>
+          <td>
+            {{ form.label('Action') }}
+          </td>
+        </tr>
+      </thead>
+      <tbody id="bodyAddMore">
+        <tr>
+          {{ form.open({action: 'FileItemController.store', params: {project_id: project_id, task_id: task_id}, files:true }) }}
+
+          {{ csrfField }}
+          <td>
+            <input type="text" name="file_name" class="form-control" />
+          </td>
+          <td>
+            <input type="file" name="file_items" class="form-control" />
+          </td>
+          <td>
+            <button class="btn btn-sm btn-info" type="submit">Submit</button>
+          </td>
+          {{ form.close() }}
+        </tr>
+      </tbody>
+    </table>
+
+    <br/>
     <table class="table table-striped data-table">
       <thead>
         <tr>

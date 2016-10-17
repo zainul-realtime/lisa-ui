@@ -32,6 +32,7 @@ Route.group('', function () {
   Route.delete('/projects/:project_id/tasks/:id', 'TaskController.destroy')
 
   Route.get('/projects/:project_id/tasks/:task_id/file_items', 'FileItemController.index')
+  Route.post('/projects/:project_id/tasks/:task_id/file_items', 'FileItemController.store')
   Route.get('/projects/:project_id/tasks/:task_id/file_items/:file_id', 'ExecuteLogController.index')
 
   Route.get('/file_items/:id', 'FileItemController.download');
