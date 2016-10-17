@@ -1,15 +1,53 @@
 'use strict'
 
+const {{shortName}} = use('App/Model/{{shortName}}');
+const {{shortName}}Repository = make('App/Repositories/{{shortName}}');
+
 class {{name}} {
 
-{{#resource}}
-{{#methods}}
-  * {{.}}(request, response) {
-    //
+  * index(request, response) {
+    const {{shortNameLower}}s = yield {{shortName}}.query().fetch();
+
+    yield response.sendView('{{shortNameLower}}s.index', {})
   }
 
-{{/methods}}
-{{/resource}}
+  * create(request, response) {
+    yield response.sendView('{{shortNameLower}}s.create', {} )
+  }
+
+  * store(request, response) {
+    const postData = request.only('your object here');
+    const created = yield {{shortName}}.create(postData);
+    response.redirect('back');
+  }
+
+  * show(request, response) {
+    const {{shortNameLower}} = yield {{shortName}}Repository.find(request.param('id'))
+
+    yield response.sendView('{{shortNameLower}}s.show',
+      {
+        {{shortNameLower}}: {{shortNameLower}}.toJSON()
+      });
+  }
+
+  * edit(request, response) {
+    const {{shortNameLower}} = yield {{shortName}}Repository.find(request.param('id'))
+
+    yield response.sendView('{{shortNameLower}}s.edit', { {{shortNameLower}}: {{shortNameLower}}.toJSON() })
+  }
+
+  * update(request, response) {
+    const updatedData = request.only('your object here');
+    const {{shortNameLower}} = yield {{shortName}}Repository.update(request.param('id'), updatedData)
+
+    yield response.redirect('/{{shortNameLower}}s')
+  }
+
+  * destroy(request, response) {
+    yield {{shortName}}Repository.delete(request.param('id'));
+
+    yield response.redirect('/{{shortNameLower}}s');
+  }
 }
 
 module.exports = {{name}}

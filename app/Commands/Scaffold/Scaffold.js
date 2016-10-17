@@ -15,11 +15,14 @@ class Scaffold extends BaseGenerator {
 
   * makeController(name) {
     const entity = this._makeEntityName(name, 'controller', true)
+    const shortName = entity.entityName.split('Controller')[0];
     const toPath = path.join(this.helpers.appPath(), 'Http/Controllers', `${entity.entityPath}.js`)
     const templateOptions = {
       methods: ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'],
       resource: true,
-      name: entity.entityName
+      name: entity.entityName,
+      shortName: shortName,
+      shortNameLower: shortName.toLowerCase()
     }
     yield this._wrapWrite('controller', toPath, templateOptions)
   }
@@ -51,7 +54,7 @@ class Scaffold extends BaseGenerator {
     const template = 'repository'
     const templateOptions = {
       name: entity.entityName,
-      lowerName: table.entityName.toLowerCase()
+      lowerName: entity.entityName.toLowerCase()
     }
     try {
       yield this.write(template, toPath, templateOptions)
@@ -74,8 +77,9 @@ class Scaffold extends BaseGenerator {
     try {
       const name = args.name
       yield this.makeController(name)
-      yield this.makeModel(name)
-      this.success('implementation for Scaffold command')
+      // yield this.makeModel(name)
+      // yield this.makeRepository(name)
+      this.success("Yeeeaahh finished build , let's code")
     } catch (e) {
       this._error(e.message)
     }
