@@ -14,16 +14,24 @@ class Scaffold extends BaseGenerator {
     super(Helpers)
   }
 
-  * makeController(name) {
+  * makeController(name, fields) {
     const entity = this._makeEntityName(name, 'controller', true)
     const shortName = entity.entityName.split('Controller')[0];
     const toPath = path.join(this.helpers.appPath(), 'Http/Controllers', `${entity.entityPath}.js`)
+
+    const arrayStringField = [];
+
+    for (var key in fields) {
+      arrayStringField.push(key);
+    }
+
     const templateOptions = {
       methods: ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'],
       resource: true,
       name: entity.entityName,
       shortName: shortName,
-      shortNameLower: shortName.toLowerCase()
+      shortNameLower: shortName.toLowerCase(),
+      fields: arrayStringField.join("','")
     }
     yield this._wrapWrite('controller', toPath, templateOptions)
   }
@@ -111,8 +119,8 @@ class Scaffold extends BaseGenerator {
       const name = args.name
       const fields = schema[name];
       yield this.makeModel(name, fields)
-      // yield this.makeController(name)
-      // yield this.makeRepository(name)
+      yield this.makeController(name, fields)
+      yield this.makeRepository(name)
       // yield this.makeView(name)
       this.success("Ayee finished build , let's code")
     } catch (e) {

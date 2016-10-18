@@ -16,7 +16,7 @@ class {{name}} {
   }
 
   * store(request, response) {
-    const postData = request.only('your object here');
+    const postData = request.only('{{ fields | safe }}');
     const created = yield {{shortName}}.create(postData);
     response.redirect('back');
   }
@@ -37,7 +37,7 @@ class {{name}} {
   }
 
   * update(request, response) {
-    const updatedData = request.only('your object here');
+    const updatedData = request.only('{{ fields | safe  }}');
     const {{shortNameLower}} = yield {{shortName}}Repository.update(request.param('id'), updatedData)
 
     yield response.redirect('/{{shortNameLower}}s')
