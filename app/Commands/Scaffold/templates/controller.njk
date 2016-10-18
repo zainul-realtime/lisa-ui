@@ -18,6 +18,14 @@ class {{name}} {
   * store(request, response) {
     const postData = request.only('{{ fields | safe }}');
     const created = yield {{shortName}}.create(postData);
+
+    const validation = yield Validator.validate(postData, {{shortName}}.rules)
+
+    if (validation.fails()) {
+      response.redirect('back',validation.messages());
+      return
+    }
+
     response.redirect('back');
   }
 
@@ -38,6 +46,14 @@ class {{name}} {
 
   * update(request, response) {
     const updatedData = request.only('{{ fields | safe  }}');
+
+    const validation = yield Validator.validate(updatedData, {{shortName}}.rules)
+
+    if (validation.fails()) {
+      response.redirect('back',validation.messages());
+      return
+    }
+
     const {{shortNameLower}} = yield {{shortName}}Repository.update(request.param('id'), updatedData)
 
     yield response.redirect('/{{shortNameLower}}s')

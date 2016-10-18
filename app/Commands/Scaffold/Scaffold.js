@@ -71,6 +71,33 @@ class Scaffold extends BaseGenerator {
     }
   }
 
+  * makeTest(name, fields) {
+    const entity = this._makeEntityName(name, 'model', false, 'singular')
+    const table  = this._makeEntityName(name, '', false, 'plural')
+    const toPath = path.join(this.helpers.basePath(), 'tests', 'unit', `${entity.entityPath}.spec.js`)
+    const template = 'test_spec'
+    const arrayStringField = [];
+
+    for (var key in fields) {
+      arrayStringField.push(key);
+    }
+
+    const templateOptions = {
+      shortName: entity.entityName,
+      lowerName: entity.entityName.toLowerCase(),
+      tableName: table.entityName.toLowerCase(),
+      firstField: arrayStringField[0],
+      fields
+    }
+
+    try {
+      yield this.write(template, toPath, templateOptions, '.njk')
+      this._success(toPath);
+    } catch (e) {
+      this._error(e.message)
+    }
+  }
+
   * makeView(name, fields) {
     try {
       const entity = this._makeEntityName(name, 'view', false)
@@ -125,6 +152,7 @@ class Scaffold extends BaseGenerator {
       yield this.makeController(name, fields)
       yield this.makeRepository(name)
       yield this.makeView(name, fields)
+      yield this.makeTest(name, fields)
       this.success("Ayee finished build , let's code")
     } catch (e) {
       this._error(e.message)
