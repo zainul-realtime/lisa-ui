@@ -38,13 +38,10 @@ class Scaffold extends BaseGenerator {
       table: table.entityName.toLowerCase(),
       fields
     }
-
     try {
       yield this.write(template, toPath, templateOptions)
       this._success(toPath);
-      this.run('make:migration', [name], {
-        create: table.entityName.toLowerCase()
-      })
+      yield this.makeMigration(name, table.entityName.toLowerCase(), fields)
     } catch (e) {
       this._error(e.message)
     }
@@ -87,6 +84,19 @@ class Scaffold extends BaseGenerator {
     }
   }
 
+  * makeMigration(name, tableName, fields) {
+    const entity = this._makeEntityName(name, 'migration', false)
+    const toPath = this.helpers.migrationsPath(`${new Date().getTime()}_${name}.js`)
+    const template = 'migration'
+    const templateOptions = {
+      table: tableName,
+      create: tableName,
+      name: entity.entityName,
+      fields
+    }
+    yield this._wrapWrite(template, toPath, templateOptions)
+  }
+
   get signature () {
     return 'scaffold {name}'
   }
@@ -100,7 +110,7 @@ class Scaffold extends BaseGenerator {
       const schema = yaml.load(path.join(this.helpers.basePath(), 'schema.yml'));
       const name = args.name
       const fields = schema[name];
-      // yield this.makeModel(name, fields)
+      yield this.makeModel(name, fields)
       // yield this.makeController(name)
       // yield this.makeRepository(name)
       // yield this.makeView(name)

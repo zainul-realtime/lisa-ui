@@ -17,11 +17,11 @@ box:
     rules: required|alpha_numeric|max:5000
 
   float_field:
-    type: float,5,2
+    type: float|5,2
     rules:
 
   decimal_field:
-    type: decimal,5,2
+    type: decimal|5,2
 
   boolean_field:
     type: boolean

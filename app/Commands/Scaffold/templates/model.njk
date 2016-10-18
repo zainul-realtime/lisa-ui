@@ -4,18 +4,17 @@ const Lucid = use('Lucid')
 
 class {{name}} extends Lucid {
 
-  {{#connection}}
-  static get connection () {
-    return '{{connection}}'
-  }
-
-  {{/connection}}
-  {{#table}}
   static get table () {
     return '{{table}}'
   }
 
-  {{/table}}
+  static get rules () {
+    return {
+    {% for key, value in fields %}
+      {{ key }} : '{{ value.rules }}',
+    {% endfor %}
+    }
+  }
 }
 
 module.exports = {{name}}

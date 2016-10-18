@@ -10,11 +10,15 @@
 */
 
 const path = require('path')
-const hogan = require('hogan.js')
+const nunjucks = require('nunjucks')
 const i = require('inflect')
 const Ioc = require('adonis-fold').Ioc
 const Command = Ioc.use('Adonis/Src/Command')
 const fs = require('co-fs-extra')
+const env = new nunjucks.Environment();
+env.addFilter('split', function(str, seperator) {
+    return str.split(seperator);
+});
 
 class Base extends Command {
 
@@ -31,7 +35,7 @@ class Base extends Command {
    * @private
    */
   _makeTemplatePath (template) {
-    return path.join(__dirname, './templates', `${template}.mustache`)
+    return path.join(__dirname, './templates', `${template}.njk`)
   }
 
   /**
@@ -101,9 +105,9 @@ class Base extends Command {
    * @public
    */
   * write (template, dest, options) {
-    template = template.endsWith('.mustache') ? template : this._makeTemplatePath(template)
+    template = template.endsWith('.njk') ? template : this._makeTemplatePath(template)
     const contents = yield this._getContents(template)
-    const temp = hogan.compile(contents)
+    const temp = nunjucks.compile(contents, env)
     const hasFile = yield this._hasFile(dest)
     if (hasFile) {
       throw new Error(`I am afraid ${this._incrementalPath(dest)} already exists`)
