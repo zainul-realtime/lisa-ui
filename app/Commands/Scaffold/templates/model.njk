@@ -10,7 +10,7 @@ class {{name}} extends Lucid {
 
   static get rules () {
     return {
-      {% for key, value in fields %}{{ key }} : '{{ value.rules }}',
+      {% for key, value in fields %}{{ key }} : '{{ value.rules }}' {% if loop.last %} {% else %},{% endif %}
       {% endfor %}
     }
   }
