@@ -10,9 +10,8 @@ class {{name}} extends Lucid {
 
   static get rules () {
     return {
-    {% for key, value in fields %}
-      {{ key }} : '{{ value.rules }}',
-    {% endfor %}
+      {% for key, value in fields %}{{ key }} : '{{ value.rules }}',
+      {% endfor %}
     }
   }
 }
