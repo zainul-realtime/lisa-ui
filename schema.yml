@@ -1,18 +1,57 @@
 # use plural word to define entity
 # box is sample field
 # for read validation rules see at http://indicative.adonisjs.com/
+# field type is mandatory
+# for type field ex:= type: string|50 it's mean type string and length 50 character
 box:
-  integer_field: integer
-  string_field: string
-  text_field: text
-  float_field: float,5,2
-  decimal_field: decimal,5,2
-  boolean_field: boolean
-  date_field: date
-  datetime_field: datetime
-  time_field: time
-  timestamp_field: timestamp
-  json_field: json
-  jsonb_field: json
-  enu_field: enu
-  binary: binary
+  integer_field:
+    type: integer
+    rules: required|integer|above:18
+
+  string_field:
+    type: string|500
+    rules: required|email|ends_with:.com
+
+  text_field:
+    type: text
+    rules: required|alpha_numeric|max:5000
+
+  float_field:
+    type: float,5,2
+    rules:
+
+  decimal_field:
+    type: decimal,5,2
+
+  boolean_field:
+    type: boolean
+    rules: boolean
+
+  date_field:
+    type: date
+    rules: date|after:2015-12-24|date_format:YYYY-MM-DD
+
+  datetime_field:
+    type: datetime
+    rules: datetime
+
+  time_field:
+    type: time
+    rules: time
+
+  timestamp_field:
+    type: timestamp
+
+  json_field:
+    type: json
+    rules: json
+
+  jsonb_field:
+    type: jsonb
+
+  enu_field:
+    type: enu
+    rules: array
+
+  binary_field:
+    type: binary

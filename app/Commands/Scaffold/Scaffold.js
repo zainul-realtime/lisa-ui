@@ -35,7 +35,8 @@ class Scaffold extends BaseGenerator {
     const template = 'model'
     const templateOptions = {
       name: entity.entityName,
-      table: table.entityName.toLowerCase()
+      table: table.entityName.toLowerCase(),
+      fields
     }
 
     try {
@@ -98,11 +99,11 @@ class Scaffold extends BaseGenerator {
     try {
       const schema = yaml.load(path.join(this.helpers.basePath(), 'schema.yml'));
       const name = args.name
-      // const fields = schema[name];
-      yield this.makeModel(name, fields)
-      yield this.makeController(name)
-      yield this.makeRepository(name)
-      yield this.makeView(name)
+      const fields = schema[name];
+      // yield this.makeModel(name, fields)
+      // yield this.makeController(name)
+      // yield this.makeRepository(name)
+      // yield this.makeView(name)
       this.success("Ayee finished build , let's code")
     } catch (e) {
       this._error(e.message)
