@@ -6,6 +6,7 @@ const path = require('path')
 const Ioc = require('adonis-fold').Ioc
 const Helpers = Ioc.use('Adonis/Src/Helpers')
 const i = require('inflect')
+const yaml = require('yamljs')
 
 class Scaffold extends BaseGenerator {
 
@@ -27,7 +28,7 @@ class Scaffold extends BaseGenerator {
     yield this._wrapWrite('controller', toPath, templateOptions)
   }
 
-  * makeModel(name) {
+  * makeModel(name, fields) {
     const entity = this._makeEntityName(name, 'model', false, 'singular')
     const table  = this._makeEntityName(name, '', false, 'plural')
     const toPath = path.join(this.helpers.appPath(), 'Model', `${entity.entityPath}.js`)
@@ -95,9 +96,11 @@ class Scaffold extends BaseGenerator {
 
   * handle (args, options) {
     try {
+      const schema = yaml.load(path.join(this.helpers.basePath(), 'schema.yml'));
       const name = args.name
+      // const fields = schema[name];
+      yield this.makeModel(name, fields)
       yield this.makeController(name)
-      yield this.makeModel(name)
       yield this.makeRepository(name)
       yield this.makeView(name)
       this.success("Ayee finished build , let's code")
