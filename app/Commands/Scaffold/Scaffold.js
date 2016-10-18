@@ -33,7 +33,7 @@ class Scaffold extends BaseGenerator {
       shortNameLower: shortName.toLowerCase(),
       fields: arrayStringField.join("','")
     }
-    yield this._wrapWrite('controller', toPath, templateOptions)
+    yield this._wrapWrite('controller', toPath, templateOptions, '.njk')
   }
 
   * makeModel(name, fields) {
@@ -47,7 +47,7 @@ class Scaffold extends BaseGenerator {
       fields
     }
     try {
-      yield this.write(template, toPath, templateOptions)
+      yield this.write(template, toPath, templateOptions, '.njk')
       this._success(toPath);
       yield this.makeMigration(name, table.entityName.toLowerCase(), fields)
     } catch (e) {
@@ -64,28 +64,31 @@ class Scaffold extends BaseGenerator {
       lowerName: entity.entityName.toLowerCase()
     }
     try {
-      yield this.write(template, toPath, templateOptions)
+      yield this.write(template, toPath, templateOptions, '.njk')
       this._success(toPath);
     } catch (e) {
       this._error(e.message)
     }
   }
 
-  * makeView(name) {
+  * makeView(name, fields) {
     try {
       const entity = this._makeEntityName(name, 'view', false)
       const table  = this._makeEntityName(name, '', false, 'plural')
+      const controllerEntity = this._makeEntityName(name, 'controller', true)
       const files = ['index', 'show', 'create', 'edit', 'field'];
 
       for (var i = 0; i < files.length; i++) {
         const toPath = path.join(this.helpers.viewsPath(),`${entity.entityName.toLowerCase()}s`, `${files[i]}.njk`)
         const template = `view_${files[i]}`
         const templateOptions = {
-          extend: 'master'
+          objectDb: entity.entityName.toLowerCase(),
+          fields,
+          name: entity.entityName,
+          controllerName: controllerEntity.entityName,
         }
-        yield this._wrapWrite(template, toPath, templateOptions)
+        yield this._wrapWrite(template, toPath, templateOptions, '.ejs')
       }
-
 
     }catch(e) {
       this._error(e.message)
@@ -102,7 +105,7 @@ class Scaffold extends BaseGenerator {
       name: entity.entityName,
       fields
     }
-    yield this._wrapWrite(template, toPath, templateOptions)
+    yield this._wrapWrite(template, toPath, templateOptions, '.njk')
   }
 
   get signature () {
@@ -121,7 +124,7 @@ class Scaffold extends BaseGenerator {
       yield this.makeModel(name, fields)
       yield this.makeController(name, fields)
       yield this.makeRepository(name)
-      // yield this.makeView(name)
+      yield this.makeView(name, fields)
       this.success("Ayee finished build , let's code")
     } catch (e) {
       this._error(e.message)

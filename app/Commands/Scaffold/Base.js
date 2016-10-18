@@ -11,6 +11,7 @@
 
 const path = require('path')
 const nunjucks = require('nunjucks')
+const ejs = require('ejs')
 const i = require('inflect')
 const Ioc = require('adonis-fold').Ioc
 const Command = Ioc.use('Adonis/Src/Command')
@@ -34,8 +35,8 @@ class Base extends Command {
    *
    * @private
    */
-  _makeTemplatePath (template) {
-    return path.join(__dirname, './templates', `${template}.njk`)
+  _makeTemplatePath (template, ext) {
+    return path.join(__dirname, './templates', `${template}${ext}`)
   }
 
   /**
@@ -104,15 +105,25 @@ class Base extends Command {
    *
    * @public
    */
-  * write (template, dest, options) {
-    template = template.endsWith('.njk') ? template : this._makeTemplatePath(template)
+
+  * write (template, dest, options, renderingTemplate) {
+
+    template = template.endsWith(renderingTemplate) ? template : this._makeTemplatePath(template, renderingTemplate)
     const contents = yield this._getContents(template)
-    const temp = nunjucks.compile(contents, env)
+
     const hasFile = yield this._hasFile(dest)
     if (hasFile) {
       throw new Error(`I am afraid ${this._incrementalPath(dest)} already exists`)
     }
-    return yield this._writeContents(dest, temp.render(options))
+
+    if (renderingTemplate == '.njk') {
+      const temp = nunjucks.compile(contents, env);
+      return yield this._writeContents(dest, temp.render(options))
+    }
+    else {
+      const temp = ejs.compile(contents)
+      return yield this._writeContents(dest, temp(options))
+    }
   }
 
   /**
@@ -162,9 +173,9 @@ class Base extends Command {
    *
    * @private
    */
-  * _wrapWrite (entity, dest, options) {
+  * _wrapWrite (entity, dest, options, renderingTemplate) {
     try {
-      yield this.write(entity, dest, options)
+      yield this.write(entity, dest, options, renderingTemplate)
       this._success(dest)
     } catch (e) {
       this._error(e.message)
