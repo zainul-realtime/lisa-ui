@@ -10,9 +10,9 @@
     <table class="table table-striped data-table">
       <thead>
         <tr>
-          <td><b>Name</b></td>
-          <td><b>Description</b></td>
-          <td><b>Action</b></td>
+          <% for(var key in fields) {%>
+            <td><b>{{ <%= objectDb %>.<%= key %> }}</b></td>
+          <% } %>
         </tr>
       </thead>
       {% for <%= objectDb %> in <%= objectDb %>s %}
