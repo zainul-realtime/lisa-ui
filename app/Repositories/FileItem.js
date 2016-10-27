@@ -139,7 +139,7 @@ class FileItemRepository {
                 response: JSON.stringify(err.original),
                 process: 'saving model',
                 sql: err.sql,
-                exceptions: err.original.detail,
+                exceptions:JSON.stringify(err),
                 file_item_id: fileItem.id,
                 data: JSON.stringify(validModel)
               })

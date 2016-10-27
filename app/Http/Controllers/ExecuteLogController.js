@@ -34,6 +34,8 @@ class ExecuteLogController {
 
     responseData.execute_logs = this.findAndToJSON(execute_logs.toJSON(), 'response');
 
+    responseData.execute_logs = this.findAndToJSON(execute_logs.toJSON(), 'exceptions');
+
     yield response.sendView('execute_logs.index', responseData)
   }
 }

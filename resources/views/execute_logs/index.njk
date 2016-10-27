@@ -37,7 +37,13 @@
               </span>
             {% endif %}
           </td>
-          <td>{{ log.exceptions }}</td>
+          <td>
+            {% for name, item in (log.exceptions) %}
+              <li>
+                {{ name }} : {{ item }}
+              </li>
+            {% endfor %}
+          </td>
           <td>
             {% for name, item in (log.response) %}
               <li>
