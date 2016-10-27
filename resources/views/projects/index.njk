@@ -9,7 +9,7 @@
     <div class="row">
 
         {% for project in projects %}
-          <div class="col-sm-3">
+          <div class="col-sm-4">
               <div class="box box-primary project-item">
                 <div class="box-header with-border project-item-header">
                   <h3 class="box-title">{{ project.name }}</h3>
@@ -22,27 +22,27 @@
                 <div class="box-footer">
                   <div class='btn-group'>
                     {{ csrfField }}
-                    <a href="/projects/{{ project.id }}" class="btn btn-sm btn-info">
-                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    <a href="/projects/{{ project.id }}" class="btn btn-md btn-info">
+                      <i class="fa fa-eye" aria-hidden="true"></i> Show
                     </a>
-                    <a href="/projects/{{ project.id }}/edit" class="btn btn-sm btn-warning">
-                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <a href="/projects/{{ project.id }}/edit" class="btn btn-md btn-warning">
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
                     </a>
-                    <a href="/projects/install/{{ project.id }}" class="btn btn-sm btn-primary">
-                      <i class="fa fa-cogs" aria-hidden="true"></i>
+                    <a href="/projects/install/{{ project.id }}" class="btn btn-md btn-primary">
+                      <i class="fa fa-cogs" aria-hidden="true"></i> Install
                     </a>
-                    <a href="/projects/{{ project.id }}/tasks" class="btn btn-sm btn-success">
-                      <i class="fa fa-tasks" aria-hidden="true"></i>
+                    <a href="/projects/{{ project.id }}/tasks" class="btn btn-md btn-success">
+                      <i class="fa fa-tasks" aria-hidden="true"></i> Tasks
                     </a>
-                    <a href="/exporters/sql/editor/{{ project.id }}" class="btn btn-sm btn-danger">
-                      <i class="fa fa-database" aria-hidden="true"></i>
+                    <a href="/exporters/sql/editor/{{ project.id }}" class="btn btn-md btn-danger">
+                      <i class="fa fa-database" aria-hidden="true"></i> Exporter
                     </a>
                   </div>
 
                   <div style="float:right;">
                     {{ form.open({action: 'ProjectController.destroy', method: 'DELETE', params: { id: project.id } }) }}
                       {{ csrfField }}
-                      <button type="submit" class="btn btn-sm btn-danger">
+                      <button type="submit" class="btn btn-md btn-danger">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                       </button>
                     {{ form.close() }}

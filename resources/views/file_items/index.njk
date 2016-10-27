@@ -46,8 +46,9 @@
     <table class="table table-striped data-table">
       <thead>
         <tr>
-          <td style="width:80%;"><b>Name</b></td>
-          {# <td><b>Path</b></td> #}
+          <td><b>No</b></td>
+          <td style="width:65%;"><b>Name</b></td>
+          <td><b>Created At</b></td>
           <td><b>Download</b></td>
           <td><b>Action</b></td>
           <td><b>View Logs</b></td>
@@ -55,8 +56,9 @@
       </thead>
       {% for file in file_items %}
         <tr>
+          <td>{{ file.id }}</td>
           <td>{{ file.name }}</td>
-          {# <td>{{ file.files }}</td> #}
+          <td>{{ file.created_at }}</td>
           <td>
             <a href="/file_items/{{ file.id }}" class="btn btn-primary">
               <i class="fa fa-download" aria-hidden="true"></i>

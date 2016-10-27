@@ -29,16 +29,16 @@
             <div class='btn-group'>
               {{ csrfField }}
               <a href="/projects/{{ project_id }}/tasks/{{ task.id }}" class="btn btn-info">
-                <i class="fa fa-eye" aria-hidden="true"></i>
+                <i class="fa fa-eye" aria-hidden="true"></i> Show
               </a>
               <a href="/projects/{{ project_id }}/tasks/{{ task.id }}/edit" class="btn btn-warning">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
               </a>
               <a href="/projects/{{ project_id }}/tasks/{{ task.id }}/file_items" class="btn btn-primary">
-                <i class="fa fa-list" aria-hidden="true"></i>
+                <i class="fa fa-list" aria-hidden="true"></i> File Item
               </a>
               <a href="/tasks/yaml/{{ task.id }}" class="btn btn-success">
-                <i class="fa fa-download" aria-hidden="true"></i>
+                <i class="fa fa-download" aria-hidden="true"></i> Download
               </a>
               {{ form.button('X', 'delete', { class: 'btn btn-danger' }) }}
             <div>

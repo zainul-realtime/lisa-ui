@@ -19,12 +19,17 @@ class Validator {
         "/" + model);
 
       let type = Model.tableAttributes[key].type.constructor.key;
+
       if (['INTEGER', 'BIGINT'].indexOf(type) !== -1) {
         if (recordModel[key] == '' || recordModel[key] == null) {
-          // TODO::will be check if don't required
           delete recordModel[key];
         } else {
           recordModel[key] = Number(recordModel[key]);
+        }
+      }else {
+        if (recordModel[key] == '' || recordModel[key] == null) {
+          if (Model.tableAttributes[key].allowNull == false)
+            delete recordModel[key];
         }
       }
     }
