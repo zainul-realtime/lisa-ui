@@ -45,23 +45,46 @@ class Validator {
 
     for (var key in keyModel) {
 
+      var abc = keyModel[key];
+
       if (keyModel[key].target_table != null) {
 
         var searchKey = this.builderSearchKey(keyModel, mappers, modelName, key);
 
         var objectSearch = this.hasRootSearch(searchKey, this.sequelize, keyModel, key);
 
-        var searchCriteria = {};
+        if (objectSearch.hasParent) {
+          var listParent = [];
+          var i = 0;
+          for (var keyRecordModel in recordModel) {
+            var parent = {}
+            parent.key = key;
+            parent.value = recordModel[key +'#'+ i];
 
-        searchCriteria[objectSearch.searchKey] = recordModel[keyModel[key].source_column];
+            if (parent.value !== undefined) {
+              listParent.push(parent)
+            }
+            i++;
+          }
 
-        if (recordModel[keyModel[key].source_column] && searchCriteria[objectSearch.searchKey]) {
+          // find record model that match with key and
+          let createdModel = this.foreignKeyModelMultiple(objectSearch.foreignKeyModel, listParent).next().value;
 
-          var columnFk = keyModel[key].source_column;
+        } else {
 
-          let createdModel = this.foreignKeySearch(objectSearch.foreignKeyModel, searchCriteria).next().value;
+          var searchCriteria = {};
 
-          this.newRecordModel[columnFk] = createdModel;
+          searchCriteria[objectSearch.searchKey] = recordModel[keyModel[key].source_column];
+
+          if (recordModel[keyModel[key].source_column] && searchCriteria[objectSearch.searchKey]) {
+
+            var columnFk = keyModel[key].source_column;
+
+            let createdModel = this.foreignKeySearch(objectSearch.foreignKeyModel, searchCriteria).next().value;
+
+            this.newRecordModel[columnFk] = createdModel;
+          }
+
         }
 
       }
@@ -88,6 +111,30 @@ class Validator {
 
   finishCallback(i, keyModel) {
     return Object.keys(keyModel).length === i;
+  }
+
+  * foreignKeyModelMultiple(foreignKeyModel, listSearchCriteria) {
+
+    for (var i=0, len =  listSearchCriteria.length; i < len; i++) {
+      var searchBuilder = {}
+      searchBuilder[listSearchCriteria[i].key] = listSearchCriteria[i].value;
+      var model;
+
+      if (i == 0) {
+        model = yield foreignKeyModel.findAll({
+          raw:true,
+          where: searchBuilder
+        }).then((lists) => {
+          return lists;
+        })
+      }else {
+
+        console.log(model)
+      }
+    }
+
+
+    return model
   }
 
   * foreignKeySearch(foreignKeyModel, searchCriteria, recordModel) {
@@ -125,7 +172,16 @@ class Validator {
   }
 
   hasRootSearch(searchKey, sequelize, keyModel, key) {
-    if (searchKey && searchKey.hasOwnProperty("rootSearch")) {
+    var hasParent = undefined;
+    if ( searchKey && searchKey.hasOwnProperty("rootSearch")
+          && searchKey.hasOwnProperty("hasParent") ) {
+      var foreignKeyModel = sequelize.import("../../../models/" + this.project.id + "/" +
+        this.config.NODE_ENV + "/" +
+        searchKey['rootSearch']);
+        hasParent = true;
+        searchKey = searchKey['column'];
+
+    } else if (searchKey && searchKey.hasOwnProperty("rootSearch")) {
       var foreignKeyModel = sequelize.import("../../../models/" + this.project.id + "/" +
         this.config.NODE_ENV + "/" +
         searchKey['rootSearch']);
@@ -138,7 +194,7 @@ class Validator {
 
     }
 
-    return {foreignKeyModel, searchKey};
+    return {foreignKeyModel, searchKey, hasParent};
   }
 }
 
