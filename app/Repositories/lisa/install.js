@@ -26,7 +26,7 @@ class Install {
       ' -u ' + config.DB_USER +
       ' -p ' + config.DB_PORT +
       pwd +
-      ' -e ' + config.DB_DIALECT);
+      ' -e ' + config.DB_DIALECT, {maxBuffer: 1024 * 500});
   }
 }
 

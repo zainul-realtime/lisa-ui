@@ -45,11 +45,15 @@
             {% endfor %}
           </td>
           <td>
-            {% for name, item in (log.response) %}
-              <li>
+            {# {% if log.status == 'success' %} #}
+              {{ log.response }}
+            {# {% else %}
+              {% for name, item in (log.response) %}
+                <li>
                 {{ name }} : {{ item }}
               </li>
-            {% endfor %}
+              {% endfor %}
+            {% endif %} #}
           </td>
         </tr>
       {% endfor %}
