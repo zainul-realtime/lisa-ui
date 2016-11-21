@@ -45,46 +45,23 @@ class Validator {
 
     for (var key in keyModel) {
 
-      var abc = keyModel[key];
-
       if (keyModel[key].target_table != null) {
 
         var searchKey = this.builderSearchKey(keyModel, mappers, modelName, key);
 
         var objectSearch = this.hasRootSearch(searchKey, this.sequelize, keyModel, key);
 
-        if (objectSearch.hasParent) {
-          var listParent = [];
-          var i = 0;
-          for (var keyRecordModel in recordModel) {
-            var parent = {}
-            parent.key = key;
-            parent.value = recordModel[key +'#'+ i];
+        var searchCriteria = {};
 
-            if (parent.value !== undefined) {
-              listParent.push(parent)
-            }
-            i++;
-          }
+        searchCriteria[objectSearch.searchKey] = recordModel[keyModel[key].source_column];
 
-          // find record model that match with key and
-          let createdModel = this.foreignKeyModelMultiple(objectSearch.foreignKeyModel, listParent).next().value;
+        if (recordModel[keyModel[key].source_column] && searchCriteria[objectSearch.searchKey]) {
 
-        } else {
+          var columnFk = keyModel[key].source_column;
 
-          var searchCriteria = {};
+          let createdModel = this.foreignKeySearch(objectSearch.foreignKeyModel, searchCriteria).next().value;
 
-          searchCriteria[objectSearch.searchKey] = recordModel[keyModel[key].source_column];
-
-          if (recordModel[keyModel[key].source_column] && searchCriteria[objectSearch.searchKey]) {
-
-            var columnFk = keyModel[key].source_column;
-
-            let createdModel = this.foreignKeySearch(objectSearch.foreignKeyModel, searchCriteria).next().value;
-
-            this.newRecordModel[columnFk] = createdModel;
-          }
-
+          this.newRecordModel[columnFk] = createdModel;
         }
 
       }
@@ -113,42 +90,15 @@ class Validator {
     return Object.keys(keyModel).length === i;
   }
 
-  * foreignKeyModelMultiple(foreignKeyModel, listSearchCriteria) {
-
-    for (var i=0, len =  listSearchCriteria.length; i < len; i++) {
-      var searchBuilder = {}
-      searchBuilder[listSearchCriteria[i].key] = listSearchCriteria[i].value;
-      var model;
-
-      if (i == 0) {
-        model = yield foreignKeyModel.findAll({
-          raw:true,
-          where: searchBuilder
-        }).then((lists) => {
-          return lists;
-        })
-      }else {
-
-        console.log(model)
-      }
-    }
-
-
-    return model
-  }
-
   * foreignKeySearch(foreignKeyModel, searchCriteria, recordModel) {
 
-    const model = yield foreignKeyModel.findOrCreate({
+    const model = yield foreignKeyModel.findOne({
         where: searchCriteria,
         defaults: {}
       })
-      .spread((object, created) => {
-        return {object, created};
+      .then((object) => {
+        return {object};
       })
-      // .catch((err) => {
-      //   return {err, searchCriteria};
-      // })
 
     return model;
   }

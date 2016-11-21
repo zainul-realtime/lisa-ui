@@ -12,7 +12,8 @@ var parse = require('csv-parse/lib/sync');
 var async = require('async');
 const yaml = require('yamljs');
 const ExecuteLogRepository = make('App/Repositories/ExecuteLog');
-const Event = use('Event')
+const Event = use('Event');
+const Database = use('Database');
 
 class FileItemRepository {
 
@@ -100,6 +101,7 @@ class FileItemRepository {
     })
 
     var mappers = yaml.load(task.yaml);
+
     auto.run(function (err) {
       if (err) throw err;
 
@@ -123,7 +125,7 @@ class FileItemRepository {
 
           let validModel = validation.validationType(fileItem.name, modelWithForeignKey);
 
-          Model.create(validModel)
+          Model.create(validModel, {logging:true})
             .then(function (savedModel) {
               Event.fire('SaveOrUpdate.log',{
                 status:'success',
@@ -145,7 +147,6 @@ class FileItemRepository {
               })
             });
         }).catch(function (err) {
-          // console.log(err)
           Event.fire('SaveOrUpdate.log', {
             status:'error',
             response: JSON.stringify(err.err),
