@@ -15,7 +15,7 @@
           <td>
             {{ form.label('Name') }}
           </td>
-          <td>
+          <td style="width:45%;">
             {{ form.label('Description') }}
           </td>
           <td>
@@ -32,7 +32,11 @@
 
           {{ csrfField }}
           <td>
-            <input type="text" name="file_name" class="form-control" />
+            <select name="file_name" class="form-control list-table">
+              {% for table in tables %}
+                <option value=" {{ table }} ">{{ table }}</option>
+              {% endfor %}
+            </select>
           </td>
           <td>
             <input type="text" name="description" class="form-control" />

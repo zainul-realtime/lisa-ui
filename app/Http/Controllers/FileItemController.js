@@ -2,6 +2,7 @@
 
 const FileItem = use('App/Model/FileItem');
 const FileItemRepository = make('App/Repositories/FileItem');
+const ProjectRepository = make('App/Repositories/Project');
 const yaml = require('yamljs');
 const Helpers = use('Helpers');
 var fs = require('fs');
@@ -16,6 +17,23 @@ class FileItemController {
 
   baseRedirect(project_id) {
     return `/projects/${project_id}/tasks`;
+  }
+
+  removeExtention(array) {
+    for (var i = 0; i < array.length; i++) {
+      array[i] = array[i].split('.')[0];
+    }
+    return array;
+  }
+
+  listTables(project) {
+    const config = yaml.load(project.toJSON().env);
+
+    const files = this.removeExtention(
+      fs.readdirSync('./models/'+ project.toJSON()['id'] + '/' + config.NODE_ENV)
+    );
+
+    return files;
   }
 
   * uploadAndMove(requestFile, response, dir, storagePath) {
@@ -48,8 +66,11 @@ class FileItemController {
                                 .where('task_id', request.param('task_id'))
                                 .fetch();
 
+    const project = yield ProjectRepository.find(request.param('project_id'));
+
     const responseData = this.getParamId(request);
     responseData.file_items = file_items.toJSON()
+    responseData.tables = this.listTables(project);
 
     yield response.sendView('file_items.index', responseData)
   }
