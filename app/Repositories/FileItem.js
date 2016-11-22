@@ -137,9 +137,18 @@ class FileItemRepository {
               })
             })
             .catch(function (err) {
+
+              var error ;
+              if (err.original && err.original != '') {
+                error = err.original;
+              }else {
+                error = err;
+              }
+
+
               Event.fire('SaveOrUpdate.log',{
                 status:'error',
-                response: JSON.stringify(err.original),
+                response: JSON.stringify(error),
                 process: 'saving model',
                 sql: err.sql,
                 exceptions:JSON.stringify(err),
@@ -148,9 +157,15 @@ class FileItemRepository {
               })
             });
         }).catch(function (err) {
+          var error ;
+          if (err.err && err.err != '') {
+            error = err.err;
+          }else {
+            error = err;
+          }
           Event.fire('SaveOrUpdate.log', {
             status:'error',
-            response: JSON.stringify(err.err),
+            response: JSON.stringify(error),
             process: 'checking belongsto model',
             file_item_id: fileItem.id,
             exceptions: JSON.stringify(err.searchCriteria)
