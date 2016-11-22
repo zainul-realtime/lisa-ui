@@ -16,6 +16,9 @@
             {{ form.label('Name') }}
           </td>
           <td>
+            {{ form.label('Description') }}
+          </td>
+          <td>
             {{ form.label('File Data') }}
           </td>
           <td>
@@ -30,6 +33,9 @@
           {{ csrfField }}
           <td>
             <input type="text" name="file_name" class="form-control" />
+          </td>
+          <td>
+            <input type="text" name="description" class="form-control" />
           </td>
           <td>
             <input type="file" name="file_items" class="form-control" />
@@ -47,7 +53,8 @@
       <thead>
         <tr>
           <td><b>No</b></td>
-          <td style="width:65%;"><b>Name</b></td>
+          <td style="width:25%;"><b>Name</b></td>
+          <td style="width:25%;"><b>Description</b></td>
           <td><b>Created At</b></td>
           <td><b>Download</b></td>
           <td><b>Action</b></td>
@@ -58,6 +65,7 @@
         <tr>
           <td>{{ file.id }}</td>
           <td>{{ file.name }}</td>
+          <td>{{ file.description }}</td>
           <td>{{ file.created_at }}</td>
           <td>
             <a href="/file_items/{{ file.id }}" class="btn btn-primary">

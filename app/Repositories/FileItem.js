@@ -45,6 +45,7 @@ class FileItemRepository {
     const fileItem = new this.FileItem();
 
     fileItem.name = options.name;
+    fileItem.description = options.description;
     fileItem.user_id = options.user_id;
     fileItem.files = options.yaml;
     fileItem.task_id = options.project_id;

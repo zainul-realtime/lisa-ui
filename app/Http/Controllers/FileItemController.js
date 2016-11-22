@@ -65,9 +65,10 @@ class FileItemController {
     const file_csv = yield this.uploadAndMove(requestFile, response, './storage/file_items', 'file_items');
 
     postData.task_id = request.param('task_id');
-    postData.name = (request.file('file_items')).file.name.split('.')[0];
+    postData.name = request.input('file_name')
+    postData.description = request.input('description')
     postData.files = file_csv.uploadPath();
-    
+
     yield FileItem.create(postData);
 
     response.redirect('back');
