@@ -63,6 +63,7 @@
           <td><b>Download</b></td>
           <td><b>Action</b></td>
           <td><b>View Logs</b></td>
+          <td><b>Delete</b></td>
         </tr>
       </thead>
       {% for file in file_items %}
@@ -89,6 +90,14 @@
               <i class="fa fa-list" aria-hidden="true"></i>
               <b>View Logs</b>
             </a>
+          </td>
+          <td>
+            {{ form.open({action: 'FileItemController.destroy', method: 'DELETE', params: { id: file.id } }) }}
+            {{ csrfField }}
+            <button type="submit" class="btn btn-md btn-danger">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+            {{ form.close() }}
           </td>
         </tr>
       {% endfor %}

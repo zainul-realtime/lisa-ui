@@ -37,6 +37,7 @@ Route.group('', function () {
 
   Route.get('/file_items/:id', 'FileItemController.download');
   Route.get('/file_items/exe/:id', 'FileItemController.execute');
+  Route.delete('/file_items/:id', 'FileItemController.destroy')
 
   Route.get('/tasks/yaml/:id', 'TaskController.download');
   Route.get('/projects/yaml/:id', 'ProjectController.download');

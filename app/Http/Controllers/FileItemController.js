@@ -124,7 +124,7 @@ class FileItemController {
   * destroy(request, response) {
     yield FileItemRepository.delete(request.param('id'));
 
-    yield response.redirect(this.baseRedirect(request.param('project_id')))
+    response.redirect('back');
   }
 
   * execute(request, response) {
